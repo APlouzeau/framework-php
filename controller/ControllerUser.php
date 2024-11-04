@@ -28,7 +28,6 @@ class ControllerUser
             $pseudo = $_POST['pseudo'];
             $password = $_POST['password'];
 
-            // Appelle le modèle pour tenter de récupérer l'utilisateur
             $userModel = new ModelUser();
             $user = new EntitieUser([
                 'pseudo' => $pseudo,
@@ -37,7 +36,6 @@ class ControllerUser
             $userVerify = $userModel->login($user);
             if ($userVerify) {
 
-                // Stocke les infos utilisateur dans la session
                 $_SESSION = [
                     'id_user' => $userVerify->getid_user(),
                     'pseudo' => $userVerify->getPseudo(),
@@ -45,16 +43,12 @@ class ControllerUser
                     'email' => $userVerify->getMail(),
                 ];
 
-                // Redirige vers la page d'accueil après connexion
                 $this->homePage();
             } else {
-                // En cas de mauvais identifiants, stocke un message d'erreur
                 $error = "Nom ou mot de passe incorrect.";
+                require_once APP_PATH . "/views/login.php";
             }
         }
-
-        // Ici, tu peux inclure la vue de login avec le message d'erreur si nécessaire
-        require_once APP_PATH . "/views/login.php";
     }
 
     public function logout()
