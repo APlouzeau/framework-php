@@ -55,25 +55,19 @@ class ClassValidator
         ];
     }
 
-    public static function verifyPassword(string $password, int $minLength = 8): array
+    public static function verifyPasswordFormat(string $password)
     {
-        if (empty($password)) {
+        $regex = "/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,60})/";
+        if (!preg_match($regex, $password)) {
             return [
                 'code' => 0,
-                'message' => 'Le mot de passe ne peut pas être vide',
-            ];
-        }
-
-        if (strlen($password) < $minLength) {
-            return [
-                'code' => 0,
-                'message' => "Le mot de passe doit contenir au moins {$minLength} caractères",
+                'message' => 'Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.',
             ];
         }
 
         return [
             'code' => 1,
-            'message' => 'Le mot de passe est valide',
+            'message' => 'Mot de passe valide',
         ];
     }
 

@@ -24,10 +24,10 @@ $nicknameResult = ClassValidator::verifyNickName("u");
 echo "Nickname trop court: " . json_encode($nicknameResult) . "\n";
 
 // Test password
-$passwordResult = ClassValidator::verifyPassword("motdepasse123");
+$passwordResult = ClassValidator::verifyPasswordFormat("motdepasse123");
 echo "Password valide: " . json_encode($passwordResult) . "\n";
 
-$passwordResult = ClassValidator::verifyPassword("123");
+$passwordResult = ClassValidator::verifyPasswordFormat("123");
 echo "Password trop court: " . json_encode($passwordResult) . "\n";
 
 // Test match (confirmation)
@@ -51,7 +51,7 @@ $formData = [
 $validations = [
     'email' => ClassValidator::verifyEmail($formData['email']),
     'nickname' => ClassValidator::verifyNickName($formData['nickname']),
-    'password' => ClassValidator::verifyPassword($formData['password']),
+    'password' => ClassValidator::verifyPasswordFormat($formData['password']),
     'password_match' => ClassValidator::verifyMatch(
         $formData['password'],
         $formData['confirm_password'],
@@ -76,7 +76,7 @@ $formDataWithErrors = [
 $validationsWithErrors = [
     'email' => ClassValidator::verifyEmail($formDataWithErrors['email']),
     'nickname' => ClassValidator::verifyNickName($formDataWithErrors['nickname']),
-    'password' => ClassValidator::verifyPassword($formDataWithErrors['password']),
+    'password' => ClassValidator::verifyPasswordFormat($formDataWithErrors['password']),
     'password_match' => ClassValidator::verifyMatch(
         $formDataWithErrors['password'],
         $formDataWithErrors['confirm_password'],
