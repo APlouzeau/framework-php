@@ -1,25 +1,9 @@
 <?php
 
-class ControllerUser
+class ControllerUserLogin
 {
-    public function homePage()
-    {
-        $titlePage = "Ecoquiz : Accueil";
-        var_dump($_SESSION);
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
-        require_once APP_PATH . "/views/home.php";
-        require_once APP_PATH . "/views/footer.php";
-    }
-    public function loginPage()
-    {
-        $titlePage = "Ecoquiz : Connexion";
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
-        require_once APP_PATH . "/views/login.php";
-        require_once APP_PATH . "/views/footer.php";
-    }
 
+    private $router = new ControllerAppPages();
     public function login()
     {
         $error = '';
@@ -43,7 +27,7 @@ class ControllerUser
                     'email' => $userVerify->getMail(),
                 ];
 
-                $this->homePage();
+                $this->router->homePage();
             } else {
                 $error = "Nom ou mot de passe incorrect.";
                 require_once APP_PATH . "/views/login.php";
@@ -57,30 +41,6 @@ class ControllerUser
         session_destroy();
         header("Location: index.php");
         exit();
-    }
-
-
-
-    public function profilPage()
-    {
-        $titlePage = "Coffee Forum : Profil";
-        $modelUser = new ModelUser();
-        $user = new EntitieUser([
-            'id_user' => $_SESSION['id_user']
-        ]);
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
-        $userChecked = $modelUser->getUser($user);
-        require_once APP_PATH . "/views/profile.php";
-        require_once APP_PATH . "/views/footer.php";
-    }
-    public function registerPage()
-    {
-        $titlePage = "Ecoloquiz : Inscription";
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
-        require_once APP_PATH . "/views/register.php";
-        require_once APP_PATH . "/views/footer.php";
     }
 
     public function register()
@@ -100,16 +60,7 @@ class ControllerUser
     }
 
 
-    public function listUsers()
-    {
-        $modelUser = new ModelUser();
-        $users = $modelUser->getAllUsers();
 
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
-        require_once APP_PATH . "/views/listUsers.php";
-        require_once APP_PATH . "/views/footer.php";
-    }
 
     public function deleteUser()
     {

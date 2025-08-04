@@ -1,6 +1,8 @@
 #Variables
 .env
 
-#config
-/config/config.php
+#dependencies
+vendor/
+
+
 
