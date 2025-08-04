@@ -55,7 +55,7 @@ class ClassValidator
         ];
     }
 
-    public static function verifyPasswordFormat(string $password)
+    public static function verifyPasswordFormat(string $password): array
     {
         $regex = "/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,60})/";
         if (!preg_match($regex, $password)) {
@@ -108,6 +108,51 @@ class ClassValidator
             'code' => $isValid ? 1 : 0,
             'message' => $isValid ? 'Toutes les validations sont passées' : 'Des erreurs ont été trouvées',
             'errors' => $errors
+        ];
+    }
+
+    /**
+     * Valide qu'un champ n'est pas vide
+     */
+    public static function verifyNotEmpty(string $value, string $fieldName = 'champ'): array
+    {
+        if (empty(trim($value))) {
+            return [
+                'code' => 0,
+                'message' => "Le {$fieldName} ne peut pas être vide",
+            ];
+        }
+
+        return [
+            'code' => 1,
+            'message' => "Le {$fieldName} est valide",
+        ];
+    }
+
+    /**
+     * Valide la longueur d'une chaîne
+     */
+    public static function verifyLength(string $value, int $min, int $max, string $fieldName = 'champ'): array
+    {
+        $length = strlen($value);
+
+        if ($length < $min) {
+            return [
+                'code' => 0,
+                'message' => "Le {$fieldName} doit contenir au moins {$min} caractères",
+            ];
+        }
+
+        if ($length > $max) {
+            return [
+                'code' => 0,
+                'message' => "Le {$fieldName} doit contenir moins de {$max} caractères",
+            ];
+        }
+
+        return [
+            'code' => 1,
+            'message' => "Le {$fieldName} est valide",
         ];
     }
 }
