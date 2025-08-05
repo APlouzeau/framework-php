@@ -1,7 +1,27 @@
 # EyoPHP Makefile
 # Simple commands for common tasks
 
-.PHONY: help install test test-coverage serve clean setup setup-db docs
+.PHONY: help install test test-coverage serve clean setup setup-db docs docs-generate
+
+help: ## Afficher l'aide
+	@echo "📋 Commandes disponibles:"
+	@echo ""
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
+	@echo "  • Auto-complétion avec documentation intégrée"
+	@echo "  • Ctrl+Click pour aller à la définition"
+	@echo ""
+	@echo "📦 Régénérer documentation HTML :"
+	@echo "  • make docs-generate"
+	@echo ""
+	@echo "💡 La documentation complète style Javadoc est maintenant disponible !"
+
+docs-generate: ## Générer la documentation HTML avec Docker PHPDocumentor
+	@echo "🔄 Génération de la documentation HTML..."
+	@echo "💡 Commande Docker: docker run --rm -v \"%cd%:/data\" phpdoc/phpdoc:3 run -d class,controller,model,traits -t docs/html --title=\"EyoPHP Framework Documentation\""
+	@echo "🔧 Executez la commande ci-dessus manuellement dans PowerShell"
+	@echo "✅ Ou utilisez: docker run --rm -v \"%cd%:/data\" phpdoc/phpdoc:3 run -d class,controller,model,traits -t docs/html"
+
+.PHONY: docs docs-generatege serve clean setup setup-db docs
 
 # Default target
 help:
@@ -74,13 +94,21 @@ setup-db:
 
 # Generate documentation
 docs:
-	@echo "📚 Generating documentation..."
-	@if not exist docs mkdir docs
-	@echo "Generating simple documentation from PHPDoc comments..."
-	@echo "Documentation will be in docs/ folder"
+	@echo "📚 Documentation EyoPHP Framework"
+	@echo "================================="
 	@echo ""
-	@echo "For full documentation generation, install phpDocumentor:"
-	@echo "  wget https://phpdoc.org/phpDocumentor.phar"
-	@echo "  php phpDocumentor.phar -d . -t docs/"
+	@echo "📖 Accès documentation :"
+	@echo "  • Manuel (Markdown) : http://localhost:8000/docs/API.md"
+	@echo "  • Manuel (README)   : http://localhost:8000/docs/README.md"
 	@echo ""
-	@echo "Or use online tools like ApiGen or Sami"
+	@echo "� IDE intégration (✅ FONCTIONNEL) :"
+	@echo "  • Survolez les méthodes pour voir la documentation PHPDoc"
+	@echo "  • Auto-complétion avec documentation intégrée"
+	@echo "  • Ctrl+Click pour aller à la définition"
+	@echo ""
+	@echo "📦 Génération HTML complète :"
+	@echo "  • Version PHAR  : php phpDocumentor.phar run -d class -t api_docs"
+	@echo "  • Version Docker: docker run --rm -v \$${PWD}:/data phpdoc/phpdoc:3 run -d class,controller,model,traits -t docs/html"
+	@echo ""
+	@echo "⚠️  Note: Problèmes connus avec espaces dans chemin Windows"
+	@echo "💡 Solution: La documentation PHPDoc fonctionne parfaitement dans VS Code !"

@@ -40,20 +40,20 @@ class ClassValidator
         if (empty($email)) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.email.empty'),
+                'message' => Translation::get('validation.email.empty'),
             ];
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.email.invalid'),
+                'message' => Translation::get('validation.email.invalid'),
             ];
         }
 
         return [
             'code' => 1,
-            'message' => ClassTranslation::get('validation.email.valid'),
+            'message' => Translation::get('validation.email.valid'),
         ];
     }
 
@@ -73,27 +73,27 @@ class ClassValidator
         if (empty($nickname)) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.nickname.empty'),
+                'message' => Translation::get('validation.nickname.empty'),
             ];
         }
 
         if (strlen($nickname) < 3) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.nickname.too_short'),
+                'message' => Translation::get('validation.nickname.too_short'),
             ];
         }
 
         if (strlen($nickname) > 50) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.nickname.too_long'),
+                'message' => Translation::get('validation.nickname.too_long'),
             ];
         }
 
         return [
             'code' => 1,
-            'message' => ClassTranslation::get('validation.nickname.valid'),
+            'message' => Translation::get('validation.nickname.valid'),
         ];
     }
 
@@ -113,20 +113,20 @@ class ClassValidator
         if (empty($password)) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.password.empty'),
+                'message' => Translation::get('validation.password.empty'),
             ];
         }
 
         if (strlen($password) < 6) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.password.too_short'),
+                'message' => Translation::get('validation.password.too_short'),
             ];
         }
 
         return [
             'code' => 1,
-            'message' => ClassTranslation::get('validation.password.valid'),
+            'message' => Translation::get('validation.password.valid'),
         ];
     }
 
@@ -146,13 +146,13 @@ class ClassValidator
         if ($field1 !== $field2) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.field.mismatch', ['field' => $fieldName]),
+                'message' => Translation::get('validation.field.mismatch', ['field' => $fieldName]),
             ];
         }
 
         return [
             'code' => 1,
-            'message' => ClassTranslation::get('validation.field.valid', ['field' => $fieldName]),
+            'message' => Translation::get('validation.field.valid', ['field' => $fieldName]),
         ];
     }
 
@@ -171,13 +171,13 @@ class ClassValidator
         if (empty(trim($value))) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.field.empty', ['field' => $fieldName]),
+                'message' => Translation::get('validation.field.empty', ['field' => $fieldName]),
             ];
         }
 
         return [
             'code' => 1,
-            'message' => ClassTranslation::get('validation.field.valid', ['field' => $fieldName]),
+            'message' => Translation::get('validation.field.valid', ['field' => $fieldName]),
         ];
     }
 
@@ -200,7 +200,7 @@ class ClassValidator
         if ($length < $min) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.field.too_short', [
+                'message' => Translation::get('validation.field.too_short', [
                     'field' => $fieldName,
                     'min' => $min
                 ]),
@@ -210,7 +210,7 @@ class ClassValidator
         if ($length > $max) {
             return [
                 'code' => 0,
-                'message' => ClassTranslation::get('validation.field.too_long', [
+                'message' => Translation::get('validation.field.too_long', [
                     'field' => $fieldName,
                     'max' => $max
                 ]),
@@ -219,7 +219,7 @@ class ClassValidator
 
         return [
             'code' => 1,
-            'message' => ClassTranslation::get('validation.field.valid', ['field' => $fieldName]),
+            'message' => Translation::get('validation.field.valid', ['field' => $fieldName]),
         ];
     }
 

@@ -18,12 +18,16 @@ require_once APP_PATH . "config/config.php";
 
 spl_autoload_register(function ($class_name) {
     try {
-        preg_match("/^(Class|Controller|Model|Entitie)/", $class_name, $match);
+        preg_match("/^(Class|Controller|Model|Entitie|Traits)/", $class_name, $match);
+        if (empty($match[0])) {
+            throw new ClassNotFoundException("Invalid class name pattern: " . $class_name);
+        }
         $dir = match ($match[0]) {
             'Class' => APP_PATH . "/class",
             'Controller' => APP_PATH . "/controller",
             'Model' => APP_PATH . "/model",
-            'Entitie' => APP_PATH . "/model"
+            'Entitie' => APP_PATH . "/model",
+            'Traits' => APP_PATH . "/traits"
         };
         if (file_exists($dir . '/' . $class_name . '.php')) {
             require_once $dir . '/' . $class_name . '.php';
@@ -31,7 +35,8 @@ spl_autoload_register(function ($class_name) {
             throw new ClassNotFoundException("Class not found: " . $class_name);
         }
     } catch (\Throwable $th) {
-        var_dump($th, $class_name);
+        // Silent error in production
+        error_log("Autoloader error: " . $th->getMessage() . " for class: " . $class_name);
     }
 });
 
@@ -45,8 +50,32 @@ require_once APP_PATH . "config/router.php";
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+// Serve static files (CSS, JS, docs) directly
+if (preg_match('/\.(css|js|md|txt|json|html|png|jpg|gif|svg)$/', $uri)) {
+    $file_path = APP_PATH . ltrim($uri, '/');
+    if (file_exists($file_path)) {
+        $extension = pathinfo($file_path, PATHINFO_EXTENSION);
+        $mime_type = match ($extension) {
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'md' => 'text/markdown',
+            'txt' => 'text/plain',
+            'json' => 'application/json',
+            'html' => 'text/html',
+            'png' => 'image/png',
+            'jpg', 'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'svg' => 'image/svg+xml',
+            default => 'text/plain'
+        };
+        header('Content-Type: ' . $mime_type);
+        echo file_get_contents($file_path);
+        exit;
+    }
+}
+
 $handler = $router->getHandler($method, $uri);
-if (!class_exists($handler['controller']) || $handler['controller'] == 'ControllerError') {
+if (!$handler || !isset($handler['controller']) || !class_exists($handler['controller']) || $handler['controller'] == 'ControllerError') {
     $controller = new ControllerError();
     $controller->index($handler, $method, $uri);
 } else {

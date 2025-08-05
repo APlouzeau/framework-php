@@ -52,4 +52,9 @@ class ControllerAppPages
             'users' => $users
         ], $this->siteName);
     }
+
+    public function doc()
+    {
+        $this->generatePage("/views/doc.php", "Documentation", [], $this->siteName);
+    }
 }

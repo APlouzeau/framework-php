@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor configVersion="3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://www.phpdoc.org" xsi:schemaLocation="https://www.phpdoc.org https://raw.githubusercontent.com/phpDocumentor/phpDocumentor/master/data/xsd/phpdoc.xsd">
+    <title>EyoPHP Framework - Documentation API</title>
+    <paths>
+        <output>docs/generated</output>
+        <cache>cache</cache>
+    </paths>
+    <version number="latest">
+        <folder>latest</folder>
+        <api>
+            <source dsn=".">
+                <path>class</path>
+                <path>controller</path>
+                <path>model</path>
+                <path>traits</path>
+            </source>
+            <output>api</output>
+            <ignore hidden="true" symlinks="true">
+                <path>vendor</path>
+                <path>tests</path>
+                <path>cache</path>
+                <path>public</path>
+            </ignore>
+            <extensions>
+                <extension>php</extension>
+            </extensions>
+            <visibility>public</visibility>
+            <visibility>protected</visibility>
+            <visibility>private</visibility>
+        </api>
+    </version>
+    <template name="default" />
+</phpdocumentor>
+<item>TODO</item>
+<item>FIXME</item>
+<item>NOTE</item>
+</markers>
+</parser>
+
+<!-- Configuration du transformateur -->
+<transformer>
+<target>docs/generated</target>
+</transformer>
+</phpdocumentor>
