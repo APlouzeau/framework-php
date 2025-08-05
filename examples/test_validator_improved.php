@@ -51,8 +51,8 @@ $validations = [
     'nickname' => ClassValidator::verifyNickName($formData['nickname']),
     'password_format' => ClassValidator::verifyPasswordFormat($formData['password']),
     'password_match' => ClassValidator::verifyMatch(
-        $formData['password'], 
-        $formData['confirm_password'], 
+        $formData['password'],
+        $formData['confirm_password'],
         'mot de passe'
     ),
     'firstname' => ClassValidator::verifyNotEmpty($formData['firstname'], 'prénom')
