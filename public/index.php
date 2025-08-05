@@ -2,13 +2,23 @@
 #if (session_status() === PHP_SESSION_NONE) {
 session_start();
 #}
+
+// Load Composer autoloader first
+require_once __DIR__ . '/../vendor/autoload.php';
+
 define("APP_PATH", __DIR__ . "/../");
 define("BASE_URL", "/");
+
+// Load custom exception before autoloader
+require_once APP_PATH . "class/ClassNotFoundException.php";
+
+// Note: We use require_once instead of PSR-4 namespaces for simplicity
+// This makes the framework easier to understand for educational purposes
 require_once APP_PATH . "config/config.php";
 
 spl_autoload_register(function ($class_name) {
     try {
-        preg_match("/^Class|Controller|Model|Entitie/", $class_name, $match);
+        preg_match("/^(Class|Controller|Model|Entitie)/", $class_name, $match);
         $dir = match ($match[0]) {
             'Class' => APP_PATH . "/class",
             'Controller' => APP_PATH . "/controller",
@@ -18,14 +28,15 @@ spl_autoload_register(function ($class_name) {
         if (file_exists($dir . '/' . $class_name . '.php')) {
             require_once $dir . '/' . $class_name . '.php';
         } else {
-            throw new Exception("Class not found => " . $class_name, 1);
-        };
+            throw new ClassNotFoundException("Class not found: " . $class_name);
+        }
     } catch (\Throwable $th) {
         var_dump($th, $class_name);
     }
 });
 
 $router = new ClassRouter();
+// Load routes configuration - keeping simple require_once for clarity
 require_once APP_PATH . "config/router.php";
 
 //routes connection

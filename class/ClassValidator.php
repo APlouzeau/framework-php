@@ -1,7 +1,39 @@
 <?php
 
+/**
+ * ClassValidator - Classe de validation des données
+ * 
+ * Cette classe fournit des méthodes statiques pour valider différents types de données
+ * utilisées dans l'application EyoPHP (emails, mots de passe, pseudos, etc.)
+ * 
+ * @package EyoPHP\Framework
+ * @author  Alexandre PLOUZEAU
+ * @version 1.0.0
+ * @since   1.0.0
+ */
 class ClassValidator
 {
+    /**
+     * Valide une adresse email
+     * 
+     * Vérifie qu'une adresse email est valide selon les standards RFC
+     * 
+     * @param string $email L'adresse email à valider
+     * 
+     * @return array Tableau avec 'code' (0|1) et 'message' (string)
+     *               - code: 1 si valide, 0 si invalide
+     *               - message: Message descriptif du résultat
+     * 
+     * @example
+     * ```php
+     * $result = ClassValidator::verifyEmail('user@example.com');
+     * if ($result['code']) {
+     *     echo "Email valide !";
+     * }
+     * ```
+     * 
+     * @since 1.0.0
+     */
     public static function verifyEmail(string $email): array
     {
         if (empty($email)) {

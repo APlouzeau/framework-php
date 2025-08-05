@@ -1,8 +1,39 @@
-#Variables
+# Environment files
 .env
+.env.local
+.env.*.local
 
-#dependencies
+# Dependencies
 vendor/
+
+# Test results
+/tests/results/
+phpunit.cache
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Cache
+cache/
+tmp/
+
+# Backup files
+*.bak
+*.backup
+*.sql.backup
 
 
 

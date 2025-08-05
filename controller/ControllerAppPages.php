@@ -2,55 +2,54 @@
 
 class ControllerAppPages
 {
+    use TraitsPageRenderer;
+
     private $siteName = "My site";
+
+    // Legacy view constants kept for backward compatibility
+    private const VIEW_HOME = "/views/home.php";
+    private const VIEW_LOGIN = "/views/login.php";
+    private const VIEW_REGISTER = "/views/register.php";
+    private const VIEW_PROFILE = "/views/profile.php";
+    private const VIEW_LIST_USERS = "/views/listUsers.php";
+
     public function homePage()
     {
-        $titlePage = "{$this->siteName} : Accueil";
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
-        require_once APP_PATH . "/views/home.php";
-        require_once APP_PATH . "/views/footer.php";
+        $this->generatePage(self::VIEW_HOME, "Accueil", [], $this->siteName);
     }
 
     public function loginPage()
     {
-        $titlePage = "{$this->siteName} : Connexion";
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
-        require_once APP_PATH . "/views/login.php";
-        require_once APP_PATH . "/views/footer.php";
+        $this->generatePage(self::VIEW_LOGIN, "Connexion", [], $this->siteName);
     }
 
     public function profilPage()
     {
-        $titlePage = "{$this->siteName} : Profil";
+        // Prepare data for profile page
         $modelUser = new ModelUser();
         $user = new EntitieUser([
             'id_user' => $_SESSION['id_user']
         ]);
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
         $userChecked = $modelUser->getUser($user);
-        require_once APP_PATH . "/views/profile.php";
-        require_once APP_PATH . "/views/footer.php";
+
+        $this->generatePage(self::VIEW_PROFILE, "Profil", [
+            'userChecked' => $userChecked
+        ], $this->siteName);
     }
+
     public function registerPage()
     {
-        $titlePage = "{$this->siteName} : Inscription";
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
-        require_once APP_PATH . "/views/register.php";
-        require_once APP_PATH . "/views/footer.php";
+        $this->generatePage(self::VIEW_REGISTER, "Inscription", [], $this->siteName);
     }
 
     public function listUsersPage()
     {
+        // Prepare data for users list page
         $modelUser = new ModelUser();
         $users = $modelUser->getAllUsers();
 
-        require_once APP_PATH . "/views/head.php";
-        require_once APP_PATH . "/views/header.php";
-        require_once APP_PATH . "/views/listUsers.php";
-        require_once APP_PATH . "/views/footer.php";
+        $this->generatePage(self::VIEW_LIST_USERS, "Liste des utilisateurs", [
+            'users' => $users
+        ], $this->siteName);
     }
 }

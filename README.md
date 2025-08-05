@@ -1,93 +1,379 @@
-# minimal-forum
+# 🚀 EyoPHP Framework
 
+> A minimalist and pragmatic PHP framework to quickly start web projects, without the complexity of "over-engineered" solutions
 
+## 🎯 Why EyoPHP?
 
-## Getting started
+**The absolute basics of a modern PHP website:**
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+-   ✅ **Functional homepage** right after installation
+-   ✅ **Complete authentication system** (registration/login)
+-   ✅ **Simple and readable router**
+-   ✅ **Clear MVC structure** without excessive abstraction
+-   ✅ **Ready-to-use database** with SQL script provided
+-   ✅ **Ready-to-use database** with SQL script provided
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+**Philosophy: Keep it essential**
 
-## Add your files
+-   🎯 Pure PHP, no "black magic"
+-   ⚡ Up and running in 5 minutes
+-   🧠 Code you master 100%
+-   🎓 Perfect for learning or teaching web basics
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+> _"Tired of Symfony/Laravel doing too much? EyoPHP does just what's needed."_
+
+## 🚀 Installation & Quick Start
+
+### 1. Clone the project
+
+```bash
+git clone https://github.com/APlouzeau/framework-php.git my-project
+cd my-project
+```
+
+### 2. Database configuration
+
+**Important:** EyoPHP uses **phpdotenv** for environment management.
+
+```bash
+# Copy configuration file
+cp .env.example .env
+
+# Edit .env with your parameters
+DB_HOST=localhost
+DB_NAME=my_project
+DB_USER=root
+DB_PSW=password
+```
+
+> **Note:** Never commit your `.env` file to version control. The `.env.example` provides a template.
+
+### 3. Install dependencies
+
+```bash
+# With Makefile (recommended)
+make install
+
+# Manual
+composer install
+```
+
+### 4. Import database
+
+```bash
+# Create database and import schema
+mysql -u root -p < database/users.sql
+```
+
+### 5a. Start server (Development - Quick)
+
+```bash
+# With Makefile (recommended)
+make serve
+
+# Manual
+php -S localhost:8000 -t public/
+```
+
+### 5b. Production server setup (Apache/Nginx)
+
+<details>
+<summary>Click to expand server configuration</summary>
+
+**Apache Virtual Host:**
+
+```apache
+<VirtualHost *:80>
+    ServerName my-project.local
+    DocumentRoot /path/to/my-project/public
+
+    <Directory /path/to/my-project/public>
+        AllowOverride All
+        Require all granted
+        DirectoryIndex index.php
+    </Directory>
+
+    # Optional: Enable rewrite module for clean URLs
+    RewriteEngine On
+</VirtualHost>
+```
+
+**.htaccess file** (create in `public/.htaccess`):
+
+```apache
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+```
+
+**Nginx configuration:**
+
+```nginx
+server {
+    listen 80;
+    server_name my-project.local;
+    root /path/to/my-project/public;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Security: deny access to sensitive files
+    location ~ /\.(env|git) {
+        deny all;
+    }
+}
+```
+
+**Don't forget:**
+
+-   Add `127.0.0.1 my-project.local` to your `/etc/hosts` file (Linux/Mac) or `C:\Windows\System32\drivers\etc\hosts` (Windows)
+-   Restart your web server after configuration changes
+-   Ensure PHP modules are enabled: `mod_rewrite` (Apache) or `php-fpm` (Nginx)
+
+</details>
+
+### 6. You're all set! 🎉
+
+**Access your application:**
+
+-   **Development server:** `http://localhost:8000`
+-   **Apache/Nginx server:** `http://my-project.local` (after virtual host setup)
+
+**You now have:**
+
+-   A homepage
+-   A registration form (`/inscription` or `/register`)
+-   A login form (`/connexion` or `/login`)
+-   Ready-to-use test accounts (admin/admin123, moderator/mod123, testuser/user123)
+
+## 🧪 Testing (Simple)
+
+EyoPHP includes **PHPUnit** avec un exemple simple pour s'assurer que les validations fonctionnent.
+
+### Lancer les tests
+
+```bash
+# Avec Makefile (recommandé)
+make test
+
+# Manuel
+vendor/bin/phpunit
+```
+
+**Résultat:** 8 tests, 10 assertions ✅
+
+### Ce qui est testé
+
+-   ✅ Validation d'email (valide/invalide)
+-   ✅ Validation de pseudonyme (longueur, caractères)
+-   ✅ Validation de mot de passe (complexité)
+-   ✅ Validation multiple (plusieurs champs)
+
+**Fichier de test:** `tests/Unit/SimpleValidationTest.php`
+
+## 🔧 Makefile Commands
+
+EyoPHP inclut un **Makefile** pour simplifier les tâches courantes :
+
+```bash
+make            # Affiche l'aide
+make install    # Installe les dépendances
+make test       # Lance les tests
+make serve      # Démarre le serveur de développement
+make clean      # Nettoie les fichiers temporaires
+make setup      # Installation complète
+```
+
+## 🏗️ Architecture
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/ana4194138/minimal-forum.git
-git branch -M main
-git push -uf origin main
+📁 config/          # Configuration & routing
+├── config.php      # Environment variables
+└── router.php      # Route definitions
+
+📁 class/           # Utility classes
+├── ClassRouter.php # Route handler
+├── ClassDatabase.php # PDO connection
+└── ClassValidator.php # Data validation
+
+📁 controller/      # Business logic
+├── ControllerAppPages.php # Main pages
+└── ControllerUser.php     # User management
+
+📁 model/           # Data access
+├── ModelUser.php   # User SQL queries
+└── EntitieUser.php # User entity
+
+📁 views/           # PHP templates
+├── head.php, header.php, footer.php # Layout
+├── home.php        # Homepage
+├── login.php       # Login form
+└── register.php    # Registration form
+
+📁 public/          # Web entry point
+├── index.php       # Application bootstrap
+├── styles.css      # Base CSS
+└── script.js       # Base JS
+
+📁 database/        # SQL scripts
+└── users.sql       # Initial schema
 ```
 
-## Integrate with your tools
+## 📖 Usage Guide
 
-- [ ] [Set up project integrations](https://gitlab.com/ana4194138/minimal-forum/-/settings/integrations)
+### Creating a new page
 
-## Collaborate with your team
+1. **Add the route** in `config/router.php`:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```php
+$router->addRoute('GET', BASE_URL . 'my-page', 'ControllerMyController', 'myMethod');
+```
 
-## Test and Deploy
+2. **Create the controller** `controller/ControllerMyController.php`:
 
-Use the built-in continuous integration in GitLab.
+```php
+<?php
+class ControllerMyController {
+    public function myMethod() {
+        // Business logic
+        require_once APP_PATH . "views/my-page.php";
+    }
+}
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+3. **Create the view** `views/my-page.php`:
 
-***
+```php
+<?php require_once "head.php"; ?>
+<?php require_once "header.php"; ?>
 
-# Editing this README
+<h1>My new page</h1>
+<p>Page content...</p>
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+<?php require_once "footer.php"; ?>
+```
 
-## Suggestions for a good README
+### Data validation
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+The built-in validation system makes form validation easy:
 
-## Name
-Choose a self-explaining name for your project.
+```php
+// In your controller
+$validator = new ClassValidator();
+$errors = $validator->validate($_POST, [
+    'nickname' => 'required|min:3|max:20',
+    'email' => 'required|email',
+    'password' => 'required|min:8'
+]);
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+if (empty($errors)) {
+    // Process valid data
+} else {
+    // Display errors
+}
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### Data access (no ORM)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The framework encourages using pure SQL for total control:
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```php
+// In a model
+class ModelMyModel extends ClassDatabase {
+    public function getUsers() {
+        $stmt = $this->conn->prepare("
+            SELECT u.id_user, u.nickname, u.mail, r.name as role_name
+            FROM users u
+            LEFT JOIN roles r ON u.id_role = r.id_role
+            WHERE r.name = :role
+            ORDER BY u.nickname ASC
+        ");
+        $stmt->bindValue(':role', 'user');
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## 🎯 Key Concepts
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### 1. Naming convention (Smart autoloader)
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+-   `ControllerFoo` → `controller/ControllerFoo.php`
+-   `ModelBar` → `model/ModelBar.php`
+-   `ClassBaz` → `class/ClassBaz.php`
+-   `EntitieUser` → `model/EntitieUser.php`
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### 2. Simple and readable routing
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```php
+// config/router.php
+$router->addRoute('GET', '/users', 'ControllerUser', 'list');
+$router->addRoute('POST', '/users', 'ControllerUser', 'create');
+$router->addRoute('GET', '/users/{id}', 'ControllerUser', 'show');
+```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### 3. No ORM = SQL assumed
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+-   Total control over queries
+-   Optimized performance
+-   Easy debugging
+-   Learning SQL fundamentals
 
-## License
-For open source projects, say how it is licensed.
+## 🛠️ Included Features
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+-   ✅ **Autoloader** with naming conventions
+-   ✅ **Router** with HTTP methods support
+-   ✅ **Authentication system** (registration/login/logout)
+-   ✅ **Data validation** with customizable rules
+-   ✅ **Session management** built-in
+-   ✅ **PHP templates** with modular layout
+-   ✅ **Environment-based configuration** (phpdotenv)
+-   ✅ **SQL scripts** for quick start
+-   ✅ **PHPUnit testing** (simple validation tests)
+-   ✅ **Makefile** for common tasks
+
+## 🚧 Roadmap
+
+-   [ ] **CLI installer** via Composer
+-   [ ] **Code generators** (controller, model, etc.)
+-   [ ] **Simple middleware system**
+-   [ ] **File upload handling**
+-   [ ] **Simple cache** (file/Redis)
+-   [ ] **Structured logging**
+-   [x] **Basic unit tests** ✅ (simple validation tests)
+
+## 🎓 Educational Philosophy
+
+EyoPHP is designed to:
+
+-   **Understand** how a web framework works
+-   **Learn** MVC patterns without abstraction
+-   **Master** PHP and SQL rather than magic tools
+-   **Quickly start** new projects
+
+## 📦 Migration to bigger frameworks
+
+EyoPHP code is intentionally close to standard PHP. Migrating to Symfony or Laravel will be easier after understanding the basics with EyoPHP.
+
+## 🤝 Contributing
+
+This framework is primarily intended for personal and educational use. Improvement suggestions are welcome!
+
+## 📄 License
+
+MIT License - Free to use for your personal and commercial projects.
+
+---
+
+> _"Simplicity is the ultimate sophistication"_ - Leonardo da Vinci

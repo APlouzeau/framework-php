@@ -2,18 +2,20 @@
 
 class EntitieUser
 {
-    private int $id_user;
-    private string $pseudo;
-    private string $mail;
-    private string $password;
-    private string $date_inscription;
-    private string $score;
-    private string $role;
+    private int $id_user = 0;
+    private string $nickname = '';
+    private string $mail = '';
+    private string $password = '';
+    private string $created_at = '';
+    private string $updated_at = '';
+    private int $id_role = 0;
 
     // Constructeur pour hydrater les données à partir d'un tableau
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
-        $this->hydrate($data);
+        if (!empty($data)) {
+            $this->hydrate($data);
+        }
     }
 
     // Méthode pour hydrater l'objet avec les données
@@ -30,140 +32,176 @@ class EntitieUser
     /**
      * Get the value of id_user
      */
-    public function getId_user()
+    public function getId_user(): int
     {
         return $this->id_user;
     }
 
     /**
      * Set the value of id_user
-     *
-     * @return  self
      */
-    public function setId_user($id_user)
+    public function setId_user($id_user): self
     {
-        $this->id_user = $id_user;
-
+        $this->id_user = (int) $id_user;
         return $this;
     }
 
     /**
-     * Get the value of pseudo
+     * Get the value of nickname
      */
-    public function getPseudo()
+    public function getNickname(): string
     {
-        return $this->pseudo;
+        return $this->nickname;
     }
 
     /**
-     * Set the value of pseudo
-     *
-     * @return  self
+     * Set the value of nickname
      */
-    public function setPseudo($pseudo)
+    public function setNickname($nickname): self
     {
-        $this->pseudo = $pseudo;
-
+        $this->nickname = (string) $nickname;
         return $this;
     }
 
     /**
      * Get the value of mail
      */
-    public function getMail()
+    public function getMail(): string
     {
         return $this->mail;
     }
 
     /**
      * Set the value of mail
-     *
-     * @return  self
      */
-    public function setMail($mail)
+    public function setMail($mail): self
     {
-        $this->mail = $mail;
-
+        $this->mail = (string) $mail;
         return $this;
     }
 
     /**
      * Get the value of password
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
     /**
      * Set the value of password
-     *
-     * @return  self
      */
-    public function setPassword($password)
+    public function setPassword($password): self
     {
-        $this->password = $password;
-
+        $this->password = (string) $password;
         return $this;
     }
 
     /**
-     * Get the value of date_inscription
+     * Get the value of created_at
      */
-    public function getDate_inscription()
+    public function getCreated_at(): string
     {
-        return $this->date_inscription;
+        return $this->created_at;
     }
 
     /**
-     * Set the value of date_inscription
-     *
-     * @return  self
+     * Set the value of created_at
      */
-    public function setDate_inscription($date_inscription)
+    public function setCreated_at($created_at): self
     {
-        $this->date_inscription = $date_inscription;
-
+        $this->created_at = (string) $created_at;
         return $this;
     }
 
     /**
-     * Get the value of score
+     * Get the value of updated_at
      */
-    public function getScore()
+    public function getUpdated_at(): string
     {
-        return $this->score;
+        return $this->updated_at;
     }
 
     /**
-     * Set the value of score
-     *
-     * @return  self
+     * Set the value of updated_at
      */
-    public function setScore($score)
+    public function setUpdated_at($updated_at): self
     {
-        $this->score = $score;
-
+        $this->updated_at = (string) $updated_at;
         return $this;
     }
 
     /**
-     * Get the value of role
+     * Get the value of id_role
      */
-    public function getRole()
+    public function getId_role(): int
     {
-        return $this->role;
+        return $this->id_role;
     }
 
     /**
-     * Set the value of role
-     *
-     * @return  self
+     * Set the value of id_role
      */
-    public function setRole($role)
+    public function setId_role($id_role): self
     {
-        $this->role = $role;
-
+        $this->id_role = (int) $id_role;
         return $this;
+    }
+
+    /**
+     * Utility methods
+     */
+
+    /**
+     * Check if user has admin role (id_role = 3)
+     */
+    public function isAdmin(): bool
+    {
+        return $this->getId_role() === 3;
+    }
+
+    /**
+     * Check if user has moderator role (id_role = 2)
+     */
+    public function isModerator(): bool
+    {
+        return $this->getId_role() === 2;
+    }
+
+    /**
+     * Check if user has specific role by ID
+     */
+    public function hasRoleId(int $roleId): bool
+    {
+        return $this->getId_role() === $roleId;
+    }
+
+    /**
+     * Get user display name (nickname)
+     */
+    public function getDisplayName(): string
+    {
+        return $this->getNickname();
+    }
+
+    /**
+     * Convert entity to array (useful for JSON responses)
+     */
+    public function toArray(bool $includePassword = false): array
+    {
+        $data = [
+            'id_user' => $this->getId_user(),
+            'nickname' => $this->getNickname(),
+            'mail' => $this->getMail(),
+            'created_at' => $this->getCreated_at(),
+            'updated_at' => $this->getUpdated_at(),
+            'id_role' => $this->getId_role()
+        ];
+
+        if ($includePassword) {
+            $data['password'] = $this->getPassword();
+        }
+
+        return $data;
     }
 }
