@@ -1,5 +1,5 @@
 {
-    "name": "eyo-fw/php",
+    "name": "eyo/fw-php",
     "description": "EyoPHP - Framework PHP éducatif avec système de permissions, routing dynamique et middleware",
     "type": "library",
     "keywords": [
