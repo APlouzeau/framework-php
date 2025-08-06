@@ -1,16 +1,27 @@
 <?php
 
+namespace EyoPHP\Framework\Model;
 
-class ModelUser extends ClassDatabase
+use EyoPHP\Framework\Core\Database;
+use EyoPHP\Framework\Entity\User;
+use PDO;
+
+/**
+ * UserModel - Gestion des utilisateurs en base de données
+ *
+ * @package EyoPHP\Framework\Model
+ * @author  Alexandre PLOUZEAU
+ * @version 2.0.0
+ */
+class UserModel extends Database
 {
-
     /**
      * Register a new user
      */
-    public function register(EntitieUser $user): bool
+    public function register(User $user): bool
     {
         $query = "INSERT INTO users (nickname, mail, password, id_role) VALUES (:nickname, :mail, :password, :id_role)";
-        $req = $this->conn->prepare($query);
+        $req = $this->getConnection()->prepare($query);
 
         $nickname = htmlspecialchars(strip_tags($user->getNickname()));
         $mail = htmlspecialchars(strip_tags($user->getMail()));
@@ -39,12 +50,12 @@ class ModelUser extends ClassDatabase
             ORDER BY u.nickname ASC
         ";
 
-        $req = $this->conn->query($query);
+        $req = $this->getConnection()->query($query);
         $datas = $req->fetchAll(PDO::FETCH_ASSOC);
         $users = [];
 
         foreach ($datas as $data) {
-            $user = new EntitieUser($data);
+            $user = new User($data);
             $users[] = $user;
         }
 
@@ -54,7 +65,7 @@ class ModelUser extends ClassDatabase
     /**
      * Login user authentication
      */
-    public function login(EntitieUser $userVerify): EntitieUser|false
+    public function login(User $userVerify): User|false
     {
         $query = "
             SELECT
@@ -66,7 +77,7 @@ class ModelUser extends ClassDatabase
             WHERE u.nickname = :nickname
         ";
 
-        $req = $this->conn->prepare($query);
+        $req = $this->getConnection()->prepare($query);
         $req->bindValue(":nickname", $userVerify->getNickname());
         $req->execute();
 
@@ -75,7 +86,7 @@ class ModelUser extends ClassDatabase
         if ($user) {
             // Verify password using secure password_verify function
             if (password_verify($userVerify->getPassword(), $user['password'])) {
-                return new EntitieUser($user);
+                return new User($user);
             } else {
                 return false; // Incorrect password
             }
@@ -87,7 +98,7 @@ class ModelUser extends ClassDatabase
     /**
      * Get user by ID with role information
      */
-    public function getUser(EntitieUser $user): ?EntitieUser
+    public function getUser(User $user): ?User
     {
         $query = "
             SELECT
@@ -99,19 +110,19 @@ class ModelUser extends ClassDatabase
             WHERE u.id_user = :id_user
         ";
 
-        $req = $this->conn->prepare($query);
+        $req = $this->getConnection()->prepare($query);
         $req->bindValue(":id_user", $user->getId_user(), PDO::PARAM_INT);
         $req->execute();
 
         $data = $req->fetch(PDO::FETCH_ASSOC);
 
-        return $data ? new EntitieUser($data) : null;
+        return $data ? new User($data) : null;
     }
 
     /**
      * Get user by nickname with role information
      */
-    public function getUserByNickname(string $nickname): ?EntitieUser
+    public function getUserByNickname(string $nickname): ?User
     {
         $query = "
             SELECT
@@ -123,19 +134,19 @@ class ModelUser extends ClassDatabase
             WHERE u.nickname = :nickname
         ";
 
-        $req = $this->conn->prepare($query);
+        $req = $this->getConnection()->prepare($query);
         $req->bindValue(":nickname", $nickname);
         $req->execute();
 
         $data = $req->fetch(PDO::FETCH_ASSOC);
 
-        return $data ? new EntitieUser($data) : null;
+        return $data ? new User($data) : null;
     }
 
     /**
      * Update user information
      */
-    public function updateUser(EntitieUser $user): bool
+    public function updateUser(User $user): bool
     {
         $query = "
             UPDATE users
@@ -143,7 +154,7 @@ class ModelUser extends ClassDatabase
             WHERE id_user = :id_user
         ";
 
-        $req = $this->conn->prepare($query);
+        $req = $this->getConnection()->prepare($query);
 
         $nickname = htmlspecialchars(strip_tags($user->getNickname()));
         $mail = htmlspecialchars(strip_tags($user->getMail()));
@@ -161,10 +172,10 @@ class ModelUser extends ClassDatabase
     /**
      * Update user password
      */
-    public function updatePassword(EntitieUser $user, string $newPassword): bool
+    public function updatePassword(User $user, string $newPassword): bool
     {
         $query = "UPDATE users SET password = :password, updated_at = CURRENT_TIMESTAMP WHERE id_user = :id_user";
-        $req = $this->conn->prepare($query);
+        $req = $this->getConnection()->prepare($query);
 
         $password_hash = password_hash($newPassword, PASSWORD_BCRYPT);
         $id_user = $user->getId_user();
@@ -178,9 +189,9 @@ class ModelUser extends ClassDatabase
     /**
      * Delete user
      */
-    public function deleteUser(EntitieUser $user): bool
+    public function deleteUser(User $user): bool
     {
-        $req = $this->conn->prepare('DELETE FROM users WHERE id_user = :id_user');
+        $req = $this->getConnection()->prepare('DELETE FROM users WHERE id_user = :id_user');
         $req->bindValue(":id_user", $user->getId_user(), PDO::PARAM_INT);
         return $req->execute();
     }
@@ -201,7 +212,7 @@ class ModelUser extends ClassDatabase
             ORDER BY u.nickname ASC
         ";
 
-        $req = $this->conn->prepare($query);
+        $req = $this->getConnection()->prepare($query);
         $req->bindValue(":role_name", $roleName);
         $req->execute();
 
@@ -209,7 +220,7 @@ class ModelUser extends ClassDatabase
         $users = [];
 
         foreach ($datas as $data) {
-            $user = new EntitieUser($data);
+            $user = new User($data);
             $users[] = $user;
         }
 
@@ -229,7 +240,7 @@ class ModelUser extends ClassDatabase
             $params[':exclude_id'] = $excludeUserId;
         }
 
-        $req = $this->conn->prepare($query);
+        $req = $this->getConnection()->prepare($query);
         $req->execute($params);
 
         return $req->fetchColumn() == 0;
@@ -248,7 +259,7 @@ class ModelUser extends ClassDatabase
             $params[':exclude_id'] = $excludeUserId;
         }
 
-        $req = $this->conn->prepare($query);
+        $req = $this->getConnection()->prepare($query);
         $req->execute($params);
 
         return $req->fetchColumn() == 0;

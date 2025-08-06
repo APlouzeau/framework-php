@@ -7,11 +7,14 @@ require_once __DIR__ . '/../vendor/autoload.php';
 define('APP_PATH', realpath(__DIR__ . '/../') . '/');
 define('BASE_URL', '/');
 
-// Load custom exception
-require_once APP_PATH . 'class/ClassNotFoundException.php';
+// Les exceptions sont maintenant chargées automatiquement via autoloader PSR-4
+// require_once APP_PATH . 'class/ClassNotFoundException.php'; // Obsolète
 
 // Load configuration
 require_once APP_PATH . 'config/config.php';
+
+// Load aliases for backward compatibility
+require_once APP_PATH . 'src/aliases.php';
 
 // Simple autoloader for our classes
 spl_autoload_register(function ($class_name) {

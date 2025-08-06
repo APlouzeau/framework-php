@@ -2,6 +2,38 @@
 
 > A minimalist and pragmatic PHP framework to quickly start web projects, without the complexity of "over-engineered" solutions
 
+[![Latest Version](https://img.shields.io/packagist/v/aplouzeau/eyophp-framework.svg)](https://packagist.org/packages/aplouzeau/eyophp-framework)
+[![License](https://img.shields.io/packagist/l/aplouzeau/eyophp-framework.svg)](https://packagist.org/packages/aplouzeau/eyophp-framework)
+
+## 📦 Installation
+
+### Via Composer (Recommandé)
+
+```bash
+composer require aplouzeau/eyophp-framework
+```
+
+### Utilisation en tant que framework
+
+```php
+<?php
+require_once 'vendor/autoload.php';
+
+use EyoPHP\Framework\Framework;
+use EyoPHP\Framework\Core\Router;
+
+// Initialiser le framework
+Framework::init();
+
+// Votre application...
+```
+
+Voir [INSTALL.md](INSTALL.md) pour plus de détails.
+
+### Installation manuelle
+
+Clonez ce dépôt pour développer avec l'exemple complet :
+
 ## 🎯 Why EyoPHP?
 
 **The absolute basics of a modern PHP website:**
@@ -11,7 +43,7 @@
 -   ✅ **Simple and readable router**
 -   ✅ **Clear MVC structure** without excessive abstraction
 -   ✅ **Ready-to-use database** with SQL script provided
--   ✅ **Ready-to-use database** with SQL script provided
+-   ✅ **PSR-4 autoloading** and Composer support
 
 **Philosophy: Keep it essential**
 
@@ -19,19 +51,31 @@
 -   ⚡ Up and running in 5 minutes
 -   🧠 Code you master 100%
 -   🎓 Perfect for learning or teaching web basics
+-   📦 **Now installable via Composer**
 
 > _"Tired of Symfony/Laravel doing too much? EyoPHP does just what's needed."_
 
-## 🚀 Installation & Quick Start
+## 🚀 Installation
 
-### 1. Clone the project
+### Method 1: Composer (Recommended)
+
+```bash
+# Create a new project with Composer
+composer create-project aplouzeau/eyophp-framework my-project
+
+# Or add to existing project
+composer require aplouzeau/eyophp-framework
+```
+
+### Method 2: Git Clone
 
 ```bash
 git clone https://github.com/APlouzeau/framework-php.git my-project
 cd my-project
+composer install
 ```
 
-### 2. Database configuration
+## ⚙️ Configuration
 
 **Important:** EyoPHP uses **phpdotenv** for environment management.
 
@@ -48,7 +92,7 @@ DB_PSW=password
 
 > **Note:** Never commit your `.env` file to version control. The `.env.example` provides a template.
 
-### 3. Install dependencies
+### Install dependencies
 
 ```bash
 # With Makefile (recommended)
@@ -58,11 +102,23 @@ make install
 composer install
 ```
 
-### 4. Import database
+### Import database
 
 ```bash
 # Create database and import schema
 mysql -u root -p < database/users.sql
+```
+
+### Bootstrap the framework
+
+```php
+<?php
+// In your main index.php or bootstrap file
+require_once 'vendor/autoload.php'; // Composer autoloader
+require_once 'bootstrap.php';       // EyoPHP bootstrap
+
+// Or if installed via Composer
+require_once 'vendor/aplouzeau/eyophp-framework/bootstrap.php';
 ```
 
 ### 5a. Start server (Development - Quick)
@@ -230,6 +286,37 @@ make setup      # Installation complète
 ```
 
 ## 📖 Usage Guide
+
+### Using the Framework (v2.0+)
+
+EyoPHP v2.0 now supports modern PHP with PSR-4 autoloading and namespaces:
+
+```php
+<?php
+// Modern namespaced usage (recommended)
+use EyoPHP\Framework\Core\Router;
+use EyoPHP\Framework\Core\Database;
+use EyoPHP\Framework\Validation\Validator;
+
+// Initialize router
+$router = new Router();
+
+// Database singleton
+$db = Database::getInstance();
+
+// Validation
+$result = Validator::validateEmail('test@example.com');
+```
+
+**Backward compatibility:** Old class names still work via aliases:
+
+```php
+<?php
+// Legacy class names (still supported)
+$router = new ClassRouter();
+$db = new ClassDatabase();
+$result = ClassValidator::validateEmail('test@example.com');
+```
 
 ### Creating a new page
 

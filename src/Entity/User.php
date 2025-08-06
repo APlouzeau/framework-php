@@ -1,6 +1,15 @@
 <?php
 
-class EntitieUser
+namespace EyoPHP\Framework\Entity;
+
+/**
+ * User Entity - Représente un utilisateur du système
+ *
+ * @package EyoPHP\Framework\Entity
+ * @author  Alexandre PLOUZEAU
+ * @version 2.0.0
+ */
+class User
 {
     private int $id_user = 0;
     private string $nickname = '';
@@ -10,7 +19,9 @@ class EntitieUser
     private string $updated_at = '';
     private int $id_role = 0;
 
-    // Constructeur pour hydrater les données à partir d'un tableau
+    /**
+     * Constructeur pour hydrater les données à partir d'un tableau
+     */
     public function __construct(array $data = [])
     {
         if (!empty($data)) {
@@ -18,8 +29,10 @@ class EntitieUser
         }
     }
 
-    // Méthode pour hydrater l'objet avec les données
-    public function hydrate(array $data)
+    /**
+     * Méthode pour hydrater l'objet avec les données
+     */
+    public function hydrate(array $data): void
     {
         foreach ($data as $key => $value) {
             $method = "set" . ucfirst($key);

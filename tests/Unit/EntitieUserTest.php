@@ -1,18 +1,24 @@
 <?php
 
+namespace EyoPHP\Framework\Tests\Unit;
+
 use PHPUnit\Framework\TestCase;
+use EyoPHP\Framework\Entity\User;
 
 /**
- * Test class for EntitieUser
- * Demonstrates testing data entities and object behavior
+ * Test class for EntitieUser (legacy alias)
+ * Demonstrates testing data entities and object behavior using the legacy alias
  */
 class EntitieUserTest extends TestCase
 {
-    private EntitieUser $user;
+    private const TEST_EMAIL = 'test@example.com';
+    private const TEST_DATETIME = '2025-01-01 10:00:00';
+
+    private User $user;
 
     protected function setUp(): void
     {
-        $this->user = new EntitieUser();
+        $this->user = new User();
     }
 
     /**
@@ -23,18 +29,24 @@ class EntitieUserTest extends TestCase
         $userData = [
             'id_user' => 1,
             'nickname' => 'testuser',
-            'mail' => 'test@example.com',
-            'created_at' => '2025-01-01 10:00:00',
+            'mail' => self::TEST_EMAIL,
+            'created_at' => self::TEST_DATETIME,
             'id_role' => 2
         ];
 
-        $user = new EntitieUser($userData);
+        // Test avec l'alias EntitieUser
+        $legacyUserClass = 'EntitieUser';
+        $this->assertTrue(class_exists($legacyUserClass), 'EntitieUser alias should exist');
+        $user = new $legacyUserClass($userData);
 
         $this->assertEquals(1, $user->getId_user());
         $this->assertEquals('testuser', $user->getNickname());
-        $this->assertEquals('test@example.com', $user->getMail());
-        $this->assertEquals('2025-01-01 10:00:00', $user->getCreated_at());
+        $this->assertEquals(self::TEST_EMAIL, $user->getMail());
+        $this->assertEquals(self::TEST_DATETIME, $user->getCreated_at());
         $this->assertEquals(2, $user->getId_role());
+
+        // Vérifier que l'alias pointe vers la bonne classe
+        $this->assertInstanceOf(User::class, $user);
     }
 
     /**
@@ -78,9 +90,9 @@ class EntitieUserTest extends TestCase
     {
         $this->user->setId_user(1);
         $this->user->setNickname('testuser');
-        $this->user->setMail('test@example.com');
-        $this->user->setCreated_at('2025-01-01 10:00:00');
-        $this->user->setUpdated_at('2025-01-01 10:00:00');
+        $this->user->setMail(self::TEST_EMAIL);
+        $this->user->setCreated_at(self::TEST_DATETIME);
+        $this->user->setUpdated_at(self::TEST_DATETIME);
         $this->user->setId_role(2);
 
         $array = $this->user->toArray();
@@ -88,9 +100,9 @@ class EntitieUserTest extends TestCase
         $expected = [
             'id_user' => 1,
             'nickname' => 'testuser',
-            'mail' => 'test@example.com',
-            'created_at' => '2025-01-01 10:00:00',
-            'updated_at' => '2025-01-01 10:00:00',
+            'mail' => self::TEST_EMAIL,
+            'created_at' => self::TEST_DATETIME,
+            'updated_at' => self::TEST_DATETIME,
             'id_role' => 2
         ];
 
