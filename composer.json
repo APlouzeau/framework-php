@@ -34,20 +34,20 @@
     "autoload": {
         "psr-4": {
             "EyoPHP\\Framework\\": "src/"
-        },
-        "classmap": [
-            "class/",
-            "controller/"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "EyoPHP\\Framework\\Tests\\": "tests/"
         }
     },
+    "suggest": {
+        "phpunit/phpunit": "Pour exécuter les tests du framework et avoir des exemples de tests",
+        "phpdocumentor/shim": "Pour générer la documentation API"
+    },
     "extra": {
         "branch-alias": {
-            "dev-main": "2.0-dev"
+            "dev-main": "0.1-dev"
         }
     },
     "config": {
@@ -63,9 +63,12 @@
     "scripts": {
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-html tests/results/coverage --coverage-text",
-        "cs-fix": "php scripts/code-style.php",
-        "post-install-cmd": [
-            "@php -r \"copy('.env.example', '.env');\""
+        "docs": "phpdoc -c phpdoc.xml",
+        "docs-serve": "php -S localhost:8080 -t docs/api",
+        "docs-clean": "rm -rf docs/api .phpdoc",
+        "docs-setup": [
+            "cp docs-template/phpdoc.xml.example phpdoc.xml",
+            "echo 'Configuration PHPDoc copiée ! Éditez phpdoc.xml selon vos besoins.'"
         ]
     }
 }

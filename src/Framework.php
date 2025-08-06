@@ -7,14 +7,14 @@ namespace EyoPHP\Framework;
  *
  * @package EyoPHP\Framework
  * @author  Alexandre PLOUZEAU
- * @version 2.0.0
+ * @version 0.1.0
  */
 class Framework
 {
     /**
      * Version du framework
      */
-    public const VERSION = '2.0.0';
+    public const VERSION = '0.1.0';
 
     /**
      * Initialise le framework avec la configuration par défaut

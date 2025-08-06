@@ -1,0 +1,83 @@
+# Makefile pour la documentation de votre application
+# Utilise EyoPHP Framework avec PHPDocumentor
+
+# Variables
+PHPDOC = ./vendor/bin/phpdoc
+CONFIG = phpdoc.xml
+OUTPUT_DIR = docs/api
+CACHE_DIR = .phpdoc
+PORT = 8080
+
+# Couleurs pour les messages
+GREEN = \033[32m
+YELLOW = \033[33m
+RED = \033[31m
+NC = \033[0m # No Color
+
+.PHONY: help docs docs-serve docs-clean docs-check install-phpdoc
+
+# Aide par défaut
+help:
+	@echo "$(GREEN)📖 Documentation - EyoPHP Framework$(NC)"
+	@echo ""
+	@echo "$(YELLOW)Commandes disponibles :$(NC)"
+	@echo "  make docs          - Générer la documentation"
+	@echo "  make docs-serve    - Servir la documentation en local"
+	@echo "  make docs-clean    - Nettoyer les fichiers générés"
+	@echo "  make docs-check    - Vérifier la configuration"
+	@echo "  make install-phpdoc - Installer PHPDocumentor"
+	@echo ""
+	@echo "$(YELLOW)Configuration :$(NC)"
+	@echo "  Port du serveur : $(PORT)"
+	@echo "  Fichier config  : $(CONFIG)"
+	@echo "  Dossier sortie  : $(OUTPUT_DIR)"
+
+# Vérifier que PHPDocumentor est installé
+check-phpdoc:
+	@if [ ! -f $(PHPDOC) ]; then \
+		echo "$(RED)❌ PHPDocumentor non trouvé !$(NC)"; \
+		echo "$(YELLOW)Installez-le avec : make install-phpdoc$(NC)"; \
+		exit 1; \
+	fi
+
+# Vérifier que le fichier de config existe
+check-config:
+	@if [ ! -f $(CONFIG) ]; then \
+		echo "$(RED)❌ Fichier de configuration $(CONFIG) non trouvé !$(NC)"; \
+		echo "$(YELLOW)Copiez le template : cp docs-template/phpdoc.xml.example $(CONFIG)$(NC)"; \
+		exit 1; \
+	fi
+
+# Installer PHPDocumentor
+install-phpdoc:
+	@echo "$(YELLOW)📦 Installation de PHPDocumentor...$(NC)"
+	composer require --dev phpdocumentor/shim
+	@echo "$(GREEN)✅ PHPDocumentor installé !$(NC)"
+
+# Générer la documentation
+docs: check-phpdoc check-config
+	@echo "$(YELLOW)📚 Génération de la documentation...$(NC)"
+	@mkdir -p $(OUTPUT_DIR)
+	$(PHPDOC) -c $(CONFIG)
+	@echo "$(GREEN)✅ Documentation générée dans $(OUTPUT_DIR)$(NC)"
+
+# Servir la documentation en local
+docs-serve: docs
+	@echo "$(YELLOW)🌐 Démarrage du serveur de documentation...$(NC)"
+	@echo "$(GREEN)📖 Documentation disponible sur : http://localhost:$(PORT)$(NC)"
+	@echo "$(YELLOW)Appuyez sur Ctrl+C pour arrêter$(NC)"
+	php -S localhost:$(PORT) -t $(OUTPUT_DIR)
+
+# Nettoyer les fichiers générés
+docs-clean:
+	@echo "$(YELLOW)🧹 Nettoyage des fichiers de documentation...$(NC)"
+	@rm -rf $(OUTPUT_DIR) $(CACHE_DIR)
+	@echo "$(GREEN)✅ Fichiers nettoyés !$(NC)"
+
+# Vérifier la configuration
+docs-check: check-phpdoc check-config
+	@echo "$(GREEN)✅ Configuration valide !$(NC)"
+	@echo "$(YELLOW)PHPDocumentor : $(NC)$(shell $(PHPDOC) --version)"
+	@echo "$(YELLOW)Configuration : $(NC)$(CONFIG)"
+	@echo "$(YELLOW)Dossiers source détectés :$(NC)"
+	@grep -E "<folder>" $(CONFIG) | sed 's/.*<folder>\(.*\)<\/folder>.*/  - \1/' || echo "  Aucun dossier configuré"
