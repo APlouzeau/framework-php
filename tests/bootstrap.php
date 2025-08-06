@@ -1,33 +1,30 @@
 <?php
 
-// Simple bootstrap for EyoPHP tests
+/**
+ * Bootstrap pour les tests EyoPHP Framework
+ * 
+ * @package EyoPHP\Framework\Tests
+ * @author  Alexandre PLOUZEAU
+ * @version 2.0.0
+ */
+
+// Chargement de l'autoloader Composer (PSR-4)
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// Define paths
-define('APP_PATH', realpath(__DIR__ . '/../') . '/');
-define('BASE_URL', '/');
+// Définition des constantes de chemin
+if (!defined('APP_PATH')) {
+    define('APP_PATH', realpath(__DIR__ . '/../') . '/');
+}
 
-// Les exceptions sont maintenant chargées automatiquement via autoloader PSR-4
-// require_once APP_PATH . 'class/ClassNotFoundException.php'; // Obsolète
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/');
+}
 
-// Load configuration
-require_once APP_PATH . 'config/config.php';
+// Initialisation du framework pour les tests
+\EyoPHP\Framework\Framework::init();
 
-// Load aliases for backward compatibility
-require_once APP_PATH . 'src/aliases.php';
-
-// Simple autoloader for our classes
-spl_autoload_register(function ($class_name) {
-    $directories = ['class/', 'controller/', 'model/', 'traits/'];
-
-    foreach ($directories as $directory) {
-        $file = APP_PATH . $directory . $class_name . '.php';
-        if (file_exists($file)) {
-            require_once $file;
-            return;
-        }
-    }
-
-    // Optional: throw exception if class not found
-    // throw new ClassNotFoundException("Class not found: " . $class_name);
-});
+// Chargement de la configuration si elle existe
+$configFile = APP_PATH . 'config/config.php';
+if (file_exists($configFile)) {
+    require_once $configFile;
+}

@@ -34,10 +34,8 @@ class EntitieUserTest extends TestCase
             'id_role' => 2
         ];
 
-        // Test avec l'alias EntitieUser
-        $legacyUserClass = 'EntitieUser';
-        $this->assertTrue(class_exists($legacyUserClass), 'EntitieUser alias should exist');
-        $user = new $legacyUserClass($userData);
+        // Test direct avec la classe moderne
+        $user = new User($userData);
 
         $this->assertEquals(1, $user->getId_user());
         $this->assertEquals('testuser', $user->getNickname());
@@ -45,10 +43,9 @@ class EntitieUserTest extends TestCase
         $this->assertEquals(self::TEST_DATETIME, $user->getCreated_at());
         $this->assertEquals(2, $user->getId_role());
 
-        // Vérifier que l'alias pointe vers la bonne classe
+        // Vérifier que c'est une instance User
         $this->assertInstanceOf(User::class, $user);
     }
-
     /**
      * Test hasRoleId method functionality
      */

@@ -43,28 +43,19 @@ class UserEntityTest extends TestCase
     }
 
     /**
-     * Test namespace and alias compatibility
+     * Test namespace compatibility (modern PSR-4 approach)
      */
-    public function testNamespaceAliasCompatibility()
+    public function testModernUserEntity()
     {
-        // Test que l'alias fonctionne
-        $legacyUserClass = 'EntitieUser';
-        $this->assertTrue(class_exists($legacyUserClass), 'EntitieUser alias should exist');
-
-        $legacyUser = new $legacyUserClass();
         $newUser = new User();
 
-        // Les deux classes doivent avoir les mêmes méthodes
-        $this->assertTrue(method_exists($legacyUser, 'getNickname'));
+        // Test que la classe moderne existe et fonctionne
         $this->assertTrue(method_exists($newUser, 'getNickname'));
-
-        $this->assertTrue(method_exists($legacyUser, 'hasRoleId'));
         $this->assertTrue(method_exists($newUser, 'hasRoleId'));
 
-        // Test que les deux objets sont de la même classe réelle
-        $this->assertInstanceOf(User::class, $legacyUser);
+        // Test que c'est bien une instance de User
+        $this->assertInstanceOf(User::class, $newUser);
     }
-
     /**
      * Test utility methods
      */

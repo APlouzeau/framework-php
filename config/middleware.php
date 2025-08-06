@@ -6,31 +6,26 @@
  * Ce fichier configure les middlewares globaux et par route
  */
 
+use EyoPHP\Framework\Middleware\MiddlewareManager;
+
 // Middlewares globaux (s'exécutent sur toutes les routes)
-ClassMiddlewareManager::addGlobal('ClassMiddlewareLogging');
-ClassMiddlewareManager::addGlobal('ClassMiddlewareCors');
+// Note: Les middlewares ci-dessous doivent encore être convertis en PSR-4
+// MiddlewareManager::addGlobal('ClassMiddlewareLogging');
+// MiddlewareManager::addGlobal('ClassMiddlewareCors');
 
 // Middlewares par route - Protection des pages qui nécessitent une connexion
 // Décommentez selon vos besoins :
 
 // Protéger la page d'accueil
-// ClassMiddlewareManager::addToRoute('/accueil', 'ClassMiddlewareAuth');
+// MiddlewareManager::addToRoute('/accueil', 'ClassMiddlewareAuth');
 
 // Protéger les pages de profil
-// ClassMiddlewareManager::addToRoute('/profil', 'ClassMiddlewareAuth');
-// ClassMiddlewareManager::addToRoute('/profile', 'ClassMiddlewareAuth');
+// MiddlewareManager::addToRoute('/profil', 'ClassMiddlewareAuth');
+// MiddlewareManager::addToRoute('/profile', 'ClassMiddlewareAuth');
 
 // Protéger la liste des utilisateurs
-// ClassMiddlewareManager::addToRoute('/utilisateurs', 'ClassMiddlewareAuth');
-// ClassMiddlewareManager::addToRoute('/users', 'ClassMiddlewareAuth');
-
-// Middlewares par route - Protection des pages qui nécessitent une connexion
-// Protéger les pages de profil
-// ClassMiddlewareManager::addToRoute('/profil', 'ClassMiddlewareAuth');
-// ClassMiddlewareManager::addToRoute('/profile', 'ClassMiddlewareAuth');
-
-// Protéger la liste des utilisateurs
-// ClassMiddlewareManager::addToRoute('/utilisateurs', 'ClassMiddlewareAuth');
-// ClassMiddlewareManager::addToRoute('/users', 'ClassMiddlewareAuth');
+// MiddlewareManager::addToRoute('/utilisateurs', 'ClassMiddlewareAuth');
+// MiddlewareManager::addToRoute('/users', 'ClassMiddlewareAuth');
 
 // Note: Décommentez les lignes ci-dessus pour activer la protection par authentification
+// Une fois les middlewares convertis en PSR-4, utilisez les nouveaux noms de classes

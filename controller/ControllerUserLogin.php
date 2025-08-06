@@ -1,5 +1,8 @@
 <?php
 
+use EyoPHP\Framework\Entity\User;
+use EyoPHP\Framework\Model\UserModel;
+
 class ControllerUserLogin
 {
     use TraitsPageRenderer;
@@ -29,8 +32,8 @@ class ControllerUserLogin
                 return;
             }
 
-            $userModel = new ModelUser();
-            $user = new EntitieUser([
+            $userModel = new UserModel();
+            $user = new User([
                 'nickname' => $nickname,
                 'password' => $password
             ]);
@@ -87,7 +90,7 @@ class ControllerUserLogin
                 return;
             }
 
-            $userModel = new ModelUser();
+            $userModel = new UserModel();
 
             // Check if nickname is available
             if (!$userModel->isNicknameAvailable($nickname)) {
@@ -103,10 +106,10 @@ class ControllerUserLogin
                 return;
             }
 
-            $user = new EntitieUser([
+            $user = new User([
                 "nickname" => $nickname,
                 "mail" => $email,
-                "password" => $password, // Will be hashed in ModelUser
+                "password" => $password, // Will be hashed in UserModel
                 "id_role" => $id_role
             ]);
 
@@ -140,8 +143,8 @@ class ControllerUserLogin
             $response['errmsg'] = 'User not authorized';
         } else {
             $id_user = (int) $_POST['id_user'];
-            $modelUser = new ModelUser();
-            $user = new EntitieUser([
+            $modelUser = new UserModel();
+            $user = new User([
                 'id_user' => $id_user
             ]);
 

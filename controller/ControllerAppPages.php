@@ -1,5 +1,8 @@
 <?php
 
+use EyoPHP\Framework\Entity\User;
+use EyoPHP\Framework\Model\UserModel;
+
 class ControllerAppPages
 {
     use TraitsPageRenderer;
@@ -26,8 +29,8 @@ class ControllerAppPages
     public function profilPage()
     {
         // Prepare data for profile page
-        $modelUser = new ModelUser();
-        $user = new EntitieUser([
+        $modelUser = new UserModel();
+        $user = new User([
             'id_user' => $_SESSION['id_user']
         ]);
         $userChecked = $modelUser->getUser($user);
@@ -45,7 +48,7 @@ class ControllerAppPages
     public function listUsersPage()
     {
         // Prepare data for users list page
-        $modelUser = new ModelUser();
+        $modelUser = new UserModel();
         $users = $modelUser->getAllUsers();
 
         $this->generatePage(self::VIEW_LIST_USERS, "Liste des utilisateurs", [

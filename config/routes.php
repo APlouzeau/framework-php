@@ -1,12 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../class/ClassRouter.php';
-require_once __DIR__ . '/../class/ClassMiddleware.php';
-require_once __DIR__ . '/../class/ClassMiddlewarePermissions.php';
-require_once __DIR__ . '/../class/ClassMiddlewareRole.php';
+use EyoPHP\Framework\Core\Router;
 
 // Configuration des routes avec le système à 3 niveaux
-$router = new ClassRouter();
+$router = new Router();
 
 // ====================================
 // 🌐 ROUTES PUBLIQUES
@@ -63,9 +60,9 @@ $router->addAdminRoute('GET', BASE_URL . 'admin/reports', 'ControllerAdmin', 're
 // GESTION DES ERREURS
 // ====================================
 // Ces routes sont publiques car elles peuvent être atteintes depuis n'importe où
-$router->addPublicRoute('GET', BASE_URL . 'error/404', 'ControllerError', 'notFound');
-$router->addPublicRoute('GET', BASE_URL . 'error/403', 'ControllerError', 'forbidden');
-$router->addPublicRoute('GET', BASE_URL . 'error/500', 'ControllerError', 'serverError');
+$router->addPublicRoute('GET', BASE_URL . 'error/404', 'EyoPHP\\Framework\\Controller\\ErrorController', 'notFound');
+$router->addPublicRoute('GET', BASE_URL . 'error/403', 'EyoPHP\\Framework\\Controller\\ErrorController', 'forbidden');
+$router->addPublicRoute('GET', BASE_URL . 'error/500', 'EyoPHP\\Framework\\Controller\\ErrorController', 'serverError');
 
 // Retourner le router configuré
 return $router;

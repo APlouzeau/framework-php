@@ -38,9 +38,6 @@
         "classmap": [
             "class/",
             "controller/"
-        ],
-        "files": [
-            "src/aliases.php"
         ]
     },
     "autoload-dev": {

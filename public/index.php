@@ -1,26 +1,24 @@
 <?php
-#if (session_status() === PHP_SESSION_NONE) {
 session_start();
-#}
 
 // Load Composer autoloader first
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use EyoPHP\Framework\Core\Router;
+use EyoPHP\Framework\Controller\ErrorController;
+use EyoPHP\Framework\Middleware\MiddlewareManager;
+
 define("APP_PATH", __DIR__ . "/../");
 define("BASE_URL", "/");
 
-// Load custom exception before autoloader
-require_once APP_PATH . "class/ClassNotFoundException.php";
-
-// Note: We use require_once instead of PSR-4 namespaces for simplicity
-// This makes the framework easier to understand for educational purposes
+// Load configuration
 require_once APP_PATH . "config/config.php";
 
 spl_autoload_register(function ($class_name) {
     try {
         preg_match("/^(Class|Controller|Model|Entitie|Traits)/", $class_name, $match);
         if (empty($match[0])) {
-            throw new ClassNotFoundException("Invalid class name pattern: " . $class_name);
+            throw new \EyoPHP\Framework\Exception\ClassNotFoundException("Invalid class name pattern: " . $class_name);
         }
         $dir = match ($match[0]) {
             'Class' => APP_PATH . "/class",
@@ -32,7 +30,7 @@ spl_autoload_register(function ($class_name) {
         if (file_exists($dir . '/' . $class_name . '.php')) {
             require_once $dir . '/' . $class_name . '.php';
         } else {
-            throw new ClassNotFoundException("Class not found: " . $class_name);
+            throw new \EyoPHP\Framework\Exception\ClassNotFoundException("Class not found: " . $class_name);
         }
     } catch (\Throwable $th) {
         // Silent error in production
@@ -40,7 +38,7 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
-$router = new ClassRouter();
+$router = new Router();
 // Load routes configuration - keeping simple require_once for clarity
 require_once APP_PATH . "config/router.php";
 
@@ -89,18 +87,18 @@ $requestData = [
 ];
 
 // Exécuter les middlewares AVANT le contrôleur
-if (!ClassMiddlewareManager::runBefore($requestData)) {
+if (!MiddlewareManager::runBefore($requestData)) {
     // Un middleware a arrêté l'exécution
     exit;
 }
 
 if (!$handler || !isset($handler['controller']) || !class_exists($handler['controller']) || $handler['controller'] == 'ControllerError') {
-    $controller = new ControllerError();
+    $controller = new ErrorController();
     $response = $controller->index($handler, $method, $uri);
 } else {
     $controller = new $handler['controller']();
     if (!method_exists($controller, $handler['action'])) {
-        $controller = new ControllerError();
+        $controller = new ErrorController();
         $response = $controller->index($handler, $method, $uri);
     } else {
         // Passer les paramètres de route au contrôleur si disponibles
@@ -114,4 +112,4 @@ if (!$handler || !isset($handler['controller']) || !class_exists($handler['contr
 }
 
 // Exécuter les middlewares APRÈS le contrôleur
-ClassMiddlewareManager::runAfter($requestData, $response);
+MiddlewareManager::runAfter($requestData, $response);
