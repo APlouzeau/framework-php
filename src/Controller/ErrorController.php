@@ -12,6 +12,26 @@ namespace EyoPHP\Framework\Controller;
 class ErrorController
 {
     /**
+     * Page d'accueil temporaire pour tester le framework
+     */
+    public function home(): void
+    {
+        echo "<!DOCTYPE html>";
+        echo "<html><head><title>🚀 EyoPHP Framework</title></head>";
+        echo "<body>";
+        echo "<h1>🚀 Bienvenue sur EyoPHP Framework !</h1>";
+        echo "<p>✅ Le framework fonctionne correctement.</p>";
+        echo "<p>📖 Version: " . \EyoPHP\Framework\Framework::version() . "</p>";
+        echo "<p>🎯 Cette page est générée par ErrorController::home()</p>";
+        echo "<ul>";
+        echo "<li><a href='/login'>Page de connexion</a></li>";
+        echo "<li><a href='/register'>Page d'inscription</a></li>";
+        echo "<li><a href='/about'>À propos</a></li>";
+        echo "</ul>";
+        echo "</body></html>";
+    }
+
+    /**
      * Affiche une page d'erreur
      */
     public function index($handler, $method, $uri): void

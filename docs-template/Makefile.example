@@ -14,13 +14,21 @@ YELLOW = \033[33m
 RED = \033[31m
 NC = \033[0m # No Color
 
-.PHONY: help docs docs-serve docs-clean docs-check install-phpdoc
+.PHONY: help serve test test-coverage install clean build docs docs-serve docs-clean docs-check install-phpdoc
 
 # Aide par défaut
 help:
-	@echo "$(GREEN)📖 Documentation - EyoPHP Framework$(NC)"
+	@echo "$(GREEN)� EyoPHP Framework - Commandes de développement$(NC)"
 	@echo ""
-	@echo "$(YELLOW)Commandes disponibles :$(NC)"
+	@echo "$(YELLOW)🛠️  Développement :$(NC)"
+	@echo "  make serve         - Lancer le serveur de développement"
+	@echo "  make test          - Exécuter les tests"
+	@echo "  make test-coverage - Tests avec couverture de code"
+	@echo "  make install       - Installer les dépendances"
+	@echo "  make clean         - Nettoyer les fichiers temporaires"
+	@echo "  make build         - Build complet (install + test + docs)"
+	@echo ""
+	@echo "$(YELLOW)📖 Documentation :$(NC)"
 	@echo "  make docs          - Générer la documentation"
 	@echo "  make docs-serve    - Servir la documentation en local"
 	@echo "  make docs-clean    - Nettoyer les fichiers générés"
@@ -31,6 +39,50 @@ help:
 	@echo "  Port du serveur : $(PORT)"
 	@echo "  Fichier config  : $(CONFIG)"
 	@echo "  Dossier sortie  : $(OUTPUT_DIR)"
+
+# =============================================
+# COMMANDES DE DÉVELOPPEMENT
+# =============================================
+
+# Lancer le serveur de développement
+serve:
+	@echo "$(YELLOW)🚀 Démarrage du serveur de développement...$(NC)"
+	@echo "$(GREEN)🌐 Application disponible sur : http://localhost:8000$(NC)"
+	@echo "$(GREEN)📁 Dossier racine : ./public/$(NC)"
+	@echo "$(YELLOW)Appuyez sur Ctrl+C pour arrêter$(NC)"
+	php -S localhost:8000 -t public/
+
+# Installer les dépendances
+install:
+	@echo "$(YELLOW)📦 Installation des dépendances...$(NC)"
+	composer install
+	@echo "$(GREEN)✅ Dépendances installées !$(NC)"
+
+# Exécuter les tests
+test:
+	@echo "$(YELLOW)🧪 Exécution des tests...$(NC)"
+	./vendor/bin/phpunit
+	@echo "$(GREEN)✅ Tests terminés !$(NC)"
+
+# Exécuter les tests avec couverture
+test-coverage:
+	@echo "$(YELLOW)🧪 Tests avec couverture de code...$(NC)"
+	./vendor/bin/phpunit --coverage-html coverage/
+	@echo "$(GREEN)✅ Rapport de couverture généré dans ./coverage/$(NC)"
+
+# Nettoyer les fichiers temporaires
+clean:
+	@echo "$(YELLOW)🧹 Nettoyage des fichiers temporaires...$(NC)"
+	@rm -rf $(OUTPUT_DIR) $(CACHE_DIR) coverage/ .phpunit.result.cache
+	@echo "$(GREEN)✅ Fichiers temporaires nettoyés !$(NC)"
+
+# Commande complète : install + test + docs
+build: install test docs
+	@echo "$(GREEN)🎉 Build complet terminé !$(NC)"
+
+# =============================================
+# COMMANDES DE DOCUMENTATION
+# =============================================
 
 # Vérifier que PHPDocumentor est installé
 check-phpdoc:
