@@ -2,10 +2,10 @@
 
 /**
  * ClassTranslation - Système de traduction simple pour EyoPHP
- * 
+ *
  * Gère les messages d'erreur et textes utilisateur en français
  * tout en gardant le code en anglais
- * 
+ *
  * @package EyoPHP\Framework
  * @author  Alexandre PLOUZEAU
  * @version 1.0.0
@@ -59,10 +59,10 @@ class ClassTranslation
 
     /**
      * Récupérer un message traduit
-     * 
+     *
      * @param string $key Clé du message (ex: 'validation.email.invalid')
      * @param array $replacements Variables à remplacer dans le message
-     * 
+     *
      * @return string Message traduit
      */
     public static function get(string $key, array $replacements = []): string

@@ -44,6 +44,9 @@ $router = new ClassRouter();
 // Load routes configuration - keeping simple require_once for clarity
 require_once APP_PATH . "config/router.php";
 
+// Load middleware configuration
+require_once APP_PATH . "config/middleware.php";
+
 //routes connection
 
 //redirection
@@ -75,15 +78,40 @@ if (preg_match('/\.(css|js|md|txt|json|html|png|jpg|gif|svg)$/', $uri)) {
 }
 
 $handler = $router->getHandler($method, $uri);
+
+// Préparer les données de requête pour les middlewares
+$requestData = [
+    'method' => $method,
+    'uri' => $uri,
+    'path' => $handler['path'] ?? $uri,
+    'parameters' => $handler['parameters'] ?? [],
+    'handler' => $handler
+];
+
+// Exécuter les middlewares AVANT le contrôleur
+if (!ClassMiddlewareManager::runBefore($requestData)) {
+    // Un middleware a arrêté l'exécution
+    exit;
+}
+
 if (!$handler || !isset($handler['controller']) || !class_exists($handler['controller']) || $handler['controller'] == 'ControllerError') {
     $controller = new ControllerError();
-    $controller->index($handler, $method, $uri);
+    $response = $controller->index($handler, $method, $uri);
 } else {
     $controller = new $handler['controller']();
     if (!method_exists($controller, $handler['action'])) {
         $controller = new ControllerError();
-        $controller->index($handler, $method, $uri);
+        $response = $controller->index($handler, $method, $uri);
     } else {
-        $controller->{$handler['action']}();
+        // Passer les paramètres de route au contrôleur si disponibles
+        $parameters = $handler['parameters'] ?? [];
+        if (!empty($parameters)) {
+            $response = $controller->{$handler['action']}($parameters);
+        } else {
+            $response = $controller->{$handler['action']}();
+        }
     }
 }
+
+// Exécuter les middlewares APRÈS le contrôleur
+ClassMiddlewareManager::runAfter($requestData, $response);

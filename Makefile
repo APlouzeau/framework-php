@@ -1,114 +1,117 @@
-# EyoPHP Makefile
-# Simple commands for common tasks
+# EyoPHP Framework Makefile
+# Commandes pour les tâches courantes du développement
 
-.PHONY: help install test test-coverage serve clean setup setup-db docs docs-generate
+.PHONY: help install test test-coverage serve clean setup setup-db docs docs-generate code-style
 
-help: ## Afficher l'aide
-	@echo "📋 Commandes disponibles:"
-	@echo ""
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-20s %s\n", $$1, $$2}'
-	@echo "  • Auto-complétion avec documentation intégrée"
-	@echo "  • Ctrl+Click pour aller à la définition"
-	@echo ""
-	@echo "📦 Régénérer documentation HTML :"
-	@echo "  • make docs-generate"
-	@echo ""
-	@echo "💡 La documentation complète style Javadoc est maintenant disponible !"
+# Afficher l'aide (target par défaut)
+help: ## Afficher toutes les commandes disponibles
+	@echo EyoPHP Framework - Commandes disponibles:
+	@echo.
+	@echo   install          Installer les dependances Composer
+	@echo   test             Lancer les tests PHPUnit  
+	@echo   test-coverage    Tests avec rapport de couverture
+	@echo   serve            Demarrer le serveur de developpement
+	@echo   clean            Nettoyer les fichiers temporaires
+	@echo   setup            Configuration complete du projet
+	@echo   setup-db         Initialiser la base de donnees
+	@echo   docs             Afficher les options de documentation
+	@echo   docs-generate    Instructions pour generer la doc HTML
+	@echo   code-style       Nettoyer le style de code (SonarQube)
+	@echo.
+	@echo Demarrage rapide:
+	@echo   1. make setup      (installation + configuration)
+	@echo   2. make setup-db   (base de donnees)
+	@echo   3. make serve      (serveur de developpement)
+	@echo.
 
-docs-generate: ## Générer la documentation HTML avec Docker PHPDocumentor
-	@echo "🔄 Génération de la documentation HTML..."
-	@echo "💡 Commande Docker: docker run --rm -v \"%cd%:/data\" phpdoc/phpdoc:3 run -d class,controller,model,traits -t docs/html --title=\"EyoPHP Framework Documentation\""
-	@echo "🔧 Executez la commande ci-dessus manuellement dans PowerShell"
-	@echo "✅ Ou utilisez: docker run --rm -v \"%cd%:/data\" phpdoc/phpdoc:3 run -d class,controller,model,traits -t docs/html"
-
-.PHONY: docs docs-generatege serve clean setup setup-db docs
-
-# Default target
-help:
-	@echo "EyoPHP Framework - Available Commands:"
-	@echo ""
-	@echo "  make install        Install dependencies (Composer)"
-	@echo "  make test           Run PHPUnit tests"
-	@echo "  make test-coverage  Run tests with coverage report"
-	@echo "  make serve          Start development server"
-	@echo "  make clean          Clean cache and logs"
-	@echo "  make setup          Complete setup (install + database)"
-	@echo "  make setup-db       Initialize database with schema and test data"
-	@echo "  make docs           Generate documentation from PHPDoc comments"
-	@echo ""
-
-# Install Composer dependencies
-install:
-	@echo "📦 Installing dependencies..."
+install: ## Installer les dépendances Composer
+	@echo "📦 Installation des dépendances..."
 	composer install
+	@echo "✅ Dépendances installées!"
 
-# Run tests
-test:
-	@echo "🧪 Running tests..."
+test: ## Lancer les tests PHPUnit
+	@echo "🧪 Exécution des tests..."
 	vendor/bin/phpunit
+	@echo "✅ Tests terminés!"
 
-# Run tests with coverage
-test-coverage:
-	@echo "🧪 Running tests with coverage..."
+test-coverage: ## Lancer les tests avec rapport de couverture
+	@echo "🧪 Tests avec couverture de code..."
 	@if not exist tests/results mkdir tests\results
 	vendor/bin/phpunit --coverage-html tests/results/coverage --coverage-text
-	@echo "📊 Coverage report generated in tests/results/coverage/index.html"
+	@echo "📊 Rapport généré: tests/results/coverage/index.html"
 
-# Start development server
-serve:
-	@echo "🚀 Starting development server..."
-	@echo "Access: http://localhost:8000"
+serve: ## Démarrer le serveur de développement
+	@echo "🚀 Démarrage du serveur..."
+	@echo "🌐 Accès: http://localhost:8000"
+	@echo "⏹️  Arrêt: Ctrl+C"
 	php -S localhost:8000 -t public/
 
-# Clean temporary files
-clean:
-	@echo "🧹 Cleaning temporary files..."
+clean: ## Nettoyer les fichiers temporaires
+	@echo "🧹 Nettoyage des fichiers temporaires..."
 	@if exist cache rmdir /s /q cache
 	@if exist logs rmdir /s /q logs
 	@if exist tmp rmdir /s /q tmp
+	@if exist tests\results rmdir /s /q tests\results
+	@echo "✅ Nettoyage terminé!"
 
-# Complete setup
-setup: install
-	@echo "⚙️  Setting up environment..."
+setup: install ## Configuration complète du projet
+	@echo "⚙️  Configuration de l'environnement..."
 	@if not exist .env copy .env.example .env
-	@echo "✅ Setup complete!"
+	@echo "✅ Configuration terminée!"
 	@echo ""
-	@echo "Don't forget to:"
-	@echo "1. Edit .env with your database credentials"
-	@echo "2. Run: make setup-db"
-	@echo "3. Run: make serve"
+	@echo "📝 Prochaines étapes:"
+	@echo "  1. Éditez .env avec vos paramètres DB"
+	@echo "  2. Lancez: make setup-db"
+	@echo "  3. Lancez: make serve"
 
-# Initialize database
-setup-db:
-	@echo "🗄️  Setting up database..."
-	@echo "Make sure to edit .env with your database credentials first!"
+setup-db: ## Initialiser la base de données
+	@echo "🗄️  Configuration de la base de données..."
+	@echo "⚠️  Assurez-vous d'avoir configuré .env d'abord!"
 	@echo ""
-	@echo "To create the database, run one of these commands:"
+	@echo "🔧 Commandes à exécuter manuellement:"
 	@echo "  mysql -u root -p < database/users.sql"
-	@echo "  mysql -u root -p -D your_database < database/users.sql"
+	@echo "  # ou"
+	@echo "  mysql -u root -p -D votre_base < database/users.sql"
 	@echo ""
-	@echo "The script will create:"
-	@echo "  - Tables: roles, users"
-	@echo "  - Test users: admin, moderator, testuser, alice"
-	@echo "  - Default password for all test users: password123"
+	@echo "📋 Le script créera:"
+	@echo "  • Tables: roles, users"
+	@echo "  • Utilisateurs test: admin, moderator, testuser, alice"
+	@echo "  • Mot de passe par défaut: password123"
 
-# Generate documentation
-docs:
+docs: ## Afficher les options de documentation
 	@echo "📚 Documentation EyoPHP Framework"
 	@echo "================================="
 	@echo ""
-	@echo "📖 Accès documentation :"
-	@echo "  • Manuel (Markdown) : http://localhost:8000/docs/API.md"
-	@echo "  • Manuel (README)   : http://localhost:8000/docs/README.md"
+	@echo "� Documentation intégrée VS Code (RECOMMANDÉ):"
+	@echo "  • Survol des méthodes = documentation PHPDoc"
+	@echo "  • Auto-complétion avec aide contextuelle"
+	@echo "  • Ctrl+Click = aller à la définition"
 	@echo ""
-	@echo "� IDE intégration (✅ FONCTIONNEL) :"
-	@echo "  • Survolez les méthodes pour voir la documentation PHPDoc"
-	@echo "  • Auto-complétion avec documentation intégrée"
-	@echo "  • Ctrl+Click pour aller à la définition"
+	@echo "� Documentation Markdown:"
+	@echo "  • README.md (général)"
+	@echo "  • PERMISSIONS_GUIDE.md (système de permissions)"
+	@echo "  • docs/API.md (référence API)"
 	@echo ""
-	@echo "📦 Génération HTML complète :"
-	@echo "  • Version PHAR  : php phpDocumentor.phar run -d class -t api_docs"
-	@echo "  • Version Docker: docker run --rm -v \$${PWD}:/data phpdoc/phpdoc:3 run -d class,controller,model,traits -t docs/html"
+	@echo "🌐 Génération HTML:"
+	@echo "  • make docs-generate (instructions Docker)"
+
+docs-generate: ## Instructions pour générer la doc HTML
+	@echo "📦 Génération documentation HTML"
+	@echo "==============================="
 	@echo ""
-	@echo "⚠️  Note: Problèmes connus avec espaces dans chemin Windows"
-	@echo "💡 Solution: La documentation PHPDoc fonctionne parfaitement dans VS Code !"
+	@echo "🐳 Avec Docker (RECOMMANDÉ):"
+	@echo "  docker run --rm -v \"%cd%:/data\" phpdoc/phpdoc:3 \\"
+	@echo "    run -d class,controller,model,traits \\"
+	@echo "    -t docs/html \\"
+	@echo "    --title=\"EyoPHP Framework Documentation\""
+	@echo ""
+	@echo "📂 Résultat: docs/html/index.html"
+	@echo "⚠️  Note: Problèmes possibles avec espaces dans chemins Windows"
+
+code-style: ## Nettoyer le style de code selon SonarQube
+	@echo "🧹 Nettoyage du style de code..."
+	@echo "Suppression des trailing whitespaces..."
+	@powershell -Command "Get-ChildItem -Path 'class', 'controller', 'model', 'config', 'views', 'traits' -Filter '*.php' -Recurse | ForEach-Object { $$content = Get-Content $$_.FullName -Raw; $$cleaned = $$content -replace ' +\r?\n', \"`n\"; $$cleaned = $$cleaned -replace ' +$$', ''; Set-Content $$_.FullName $$cleaned -NoNewline }"
+	@echo "Ajout des nouvelles lignes finales..."
+	@powershell -Command "Get-ChildItem -Path 'class', 'controller', 'model', 'config', 'views', 'traits', 'public' -Filter '*.php' -Recurse | ForEach-Object { $$content = Get-Content $$_.FullName -Raw; if (-not $$content.EndsWith(\"`n\")) { $$content += \"`n\" }; Set-Content $$_.FullName $$content -NoNewline }"
+	@echo "✅ Nettoyage terminé!"

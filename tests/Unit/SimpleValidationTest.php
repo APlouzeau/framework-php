@@ -3,68 +3,86 @@
 use PHPUnit\Framework\TestCase;
 
 /**
- * Simple test to validate our testing setup
- * Tests the existing validator methods
+ * Tests de validation - EyoPHP Framework
+ * 
+ * Tests des méthodes de validation modernisées (validate*) 
+ * du ClassValidator avec messages français via ClassTranslation
+ * 
+ * @package EyoPHP\Tests
+ * @author  Alexandre PLOUZEAU
+ * @version 2.0.0 (mis à jour avec nouvelles méthodes)
  */
 class SimpleValidationTest extends TestCase
 {
     public function testEmailValidationWorks()
     {
-        $result = ClassValidator::verifyEmail('test@example.com');
+        $result = ClassValidator::validateEmail('test@example.com');
         $this->assertEquals(1, $result['code']);
     }
 
     public function testEmailValidationFailsForInvalidEmail()
     {
-        $result = ClassValidator::verifyEmail('invalid-email');
+        $result = ClassValidator::validateEmail('invalid-email');
         $this->assertEquals(0, $result['code']);
     }
 
     public function testNicknameValidationWorks()
     {
-        $result = ClassValidator::verifyNickName('testuser');
+        $result = ClassValidator::validateNickname('testuser');
         $this->assertEquals(1, $result['code']);
     }
 
     public function testNicknameValidationFailsForShortName()
     {
-        $result = ClassValidator::verifyNickName('a');
+        $result = ClassValidator::validateNickname('a');
         $this->assertEquals(0, $result['code']);
     }
 
     public function testPasswordValidationWorks()
     {
-        $result = ClassValidator::verifyPasswordFormat('SecurePass123!');
+        $result = ClassValidator::validatePasswordFormat('SecurePass123!');
         $this->assertEquals(1, $result['code']);
     }
 
     public function testPasswordValidationFailsForWeakPassword()
     {
-        $result = ClassValidator::verifyPasswordFormat('weak');
+        $result = ClassValidator::validatePasswordFormat('weak');
         $this->assertEquals(0, $result['code']);
     }
 
-    public function testMultipleValidationWorks()
+    public function testValidateNotEmptyWorks()
     {
-        $validations = [
-            'email' => ClassValidator::verifyEmail('test@example.com'),
-            'nickname' => ClassValidator::verifyNickName('testuser')
-        ];
-
-        $result = ClassValidator::validateMultiple($validations);
+        $result = ClassValidator::validateNotEmpty('test', 'nom');
         $this->assertEquals(1, $result['code']);
-        $this->assertEmpty($result['errors']);
     }
 
-    public function testMultipleValidationFailsWithErrors()
+    public function testValidateNotEmptyFailsForEmptyString()
     {
-        $validations = [
-            'email' => ClassValidator::verifyEmail('invalid-email'),
-            'nickname' => ClassValidator::verifyNickName('a')
-        ];
-
-        $result = ClassValidator::validateMultiple($validations);
+        $result = ClassValidator::validateNotEmpty('', 'nom');
         $this->assertEquals(0, $result['code']);
-        $this->assertCount(2, $result['errors']);
+    }
+
+    public function testValidateLengthWorks()
+    {
+        $result = ClassValidator::validateLength('testuser', 3, 50, 'pseudo');
+        $this->assertEquals(1, $result['code']);
+    }
+
+    public function testValidateLengthFailsForTooShort()
+    {
+        $result = ClassValidator::validateLength('ab', 3, 50, 'pseudo');
+        $this->assertEquals(0, $result['code']);
+    }
+
+    public function testValidateMatchWorks()
+    {
+        $result = ClassValidator::validateMatch('password123', 'password123', 'mot de passe');
+        $this->assertEquals(1, $result['code']);
+    }
+
+    public function testValidateMatchFailsForDifferentValues()
+    {
+        $result = ClassValidator::validateMatch('password123', 'different', 'mot de passe');
+        $this->assertEquals(0, $result['code']);
     }
 }
