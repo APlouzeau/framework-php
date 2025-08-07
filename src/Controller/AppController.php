@@ -3,12 +3,12 @@
 namespace EyoPHP\Framework\Controller;
 
 /**
- * Contrôleur pour les pages de l'application
+ * Controller for application pages
  */
 class AppController
 {
     /**
-     * Page d'accueil/login
+     * Home/login page
      */
     public function loginPage()
     {
@@ -19,65 +19,65 @@ class AppController
     }
 
     /**
-     * Page d'inscription
+     * Registration page
      */
     public function registerPage()
     {
         $this->renderView('register', [
-            'title' => 'Inscription',
-            'description' => 'Créez votre compte gratuit sur EyoPHP Framework et commencez à développer vos projets web'
+            'title' => 'Register',
+            'description' => 'Create your free account on EyoPHP Framework and start developing your web projects'
         ]);
     }
 
     /**
-     * Page d'accueil pour les utilisateurs connectés
+     * Home page for logged in users
      */
     public function homePage()
     {
         $this->renderView('home', [
-            'title' => 'Accueil',
-            'description' => 'Tableau de bord EyoPHP Framework - Gérez vos projets et accédez à toutes les fonctionnalités',
+            'title' => 'Home',
+            'description' => 'EyoPHP Framework Dashboard - Manage your projects and access all features',
             'user' => $_SESSION['user'] ?? null
         ]);
     }
 
     /**
-     * Page À propos
+     * About page
      */
     public function aboutPage()
     {
         $this->renderView('about', [
-            'title' => 'À propos',
-            'description' => 'Découvrez EyoPHP Framework v0.1.0 - Un framework PHP éducatif, minimaliste et moderne pour apprendre le développement web',
+            'title' => 'About',
+            'description' => 'Discover EyoPHP Framework v0.1.0 - An educational, minimalist and modern PHP framework for learning web development',
             'framework' => 'EyoPHP Framework v0.1.0'
         ]);
     }
 
     /**
-     * Page Contact
+     * Contact page
      */
     public function contactPage()
     {
         $this->renderView('contact', [
             'title' => 'Contact',
-            'description' => 'Contactez l\'équipe EyoPHP Framework pour vos questions, suggestions ou support technique'
+            'description' => 'Contact the EyoPHP Framework team for your questions, suggestions or technical support'
         ]);
     }
 
     /**
-     * Rendu d'une vue
+     * Render a view
      */
     private function renderView(string $view, array $data = [])
     {
-        // Extraire les données pour les rendre disponibles dans la vue
+        // Extract data to make it available in the view
         extract($data);
 
-        // Définir le chemin vers les vues
+        // Define path to views
         $viewPath = APP_PATH . "views/" . $view . ".php";
 
-        // Vérifier si la vue existe
+        // Check if view exists
         if (!file_exists($viewPath)) {
-            echo "<h1>Erreur 404</h1>";
+            echo "<h1>Error 404</h1>";
             echo "<p>La vue '$view' est introuvable.</p>";
             echo "<p>Chemin recherché : $viewPath</p>";
             return;

@@ -3,9 +3,9 @@
 namespace EyoPHP\Framework\Middleware;
 
 /**
- * MiddlewareManager - Gestionnaire des middlewares
+ * MiddlewareManager - Middleware manager
  *
- * Gère l'exécution des middlewares avant et après les contrôleurs
+ * Manages middleware execution before and after controllers
  *
  * @package EyoPHP\Framework\Middleware
  * @author  Alexandre PLOUZEAU
@@ -14,21 +14,21 @@ namespace EyoPHP\Framework\Middleware;
 class MiddlewareManager
 {
     /**
-     * @var array Liste des middlewares globaux
+     * @var array List of global middlewares
      */
     private static array $globalMiddlewares = [];
 
     /**
-     * @var array Liste des middlewares par route
+     * @var array List of route-specific middlewares
      */
     private static array $routeMiddlewares = [];
 
     /**
-     * Ajouter un middleware global
+     * Add a global middleware
      *
-     * S'exécute sur toutes les routes
+     * Executes on all routes
      *
-     * @param string $middlewareClass Nom de la classe middleware
+     * @param string $middlewareClass Middleware class name
      */
     public static function addGlobal(string $middlewareClass): void
     {
@@ -38,10 +38,10 @@ class MiddlewareManager
     }
 
     /**
-     * Ajouter un middleware à une route spécifique
+     * Add a middleware to a specific route
      *
-     * @param string $route Pattern de route (ex: /user/{id})
-     * @param string $middlewareClass Nom de la classe middleware
+     * @param string $route Route pattern (e.g.: /user/{id})
+     * @param string $middlewareClass Middleware class name
      */
     public static function addToRoute(string $route, string $middlewareClass): void
     {
