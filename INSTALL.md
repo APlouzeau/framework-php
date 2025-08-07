@@ -1,12 +1,64 @@
-# Installation via Composer
+# 🚀 EyoPHP Framework - Installation Guide
 
-Pour installer le framework EyoPHP dans votre projet :
+## Two Installation Modes
+
+EyoPHP Framework provides two installation modes to match your specific needs:
+
+### � Complete Mode (Recommended)
+
+**Perfect for:**
+
+-   Professional development projects
+-   Learning best practices through examples
+-   Teams wanting tested, reliable code
+-   Comprehensive development environment
+
+**What's included:**
+
+-   ✅ Complete test suite with PHPUnit
+-   ✅ Example tests showing professional patterns
+-   ✅ Documentation generation tools (phpDocumentor)
+-   ✅ Example usage file (`example.php`)
+-   ✅ Development tools and utilities
+
+**Installation:**
 
 ```bash
-composer require aplouzeau/eyophp-framework
+composer create-project eyo/fw-php my-project
+# Choose option [1] when prompted
 ```
 
-## Utilisation rapide
+**Available commands:**
+
+```bash
+composer test                # Run all tests
+composer test-coverage      # Generate coverage report
+composer docs               # Generate API documentation
+php example.php             # See framework examples
+```
+
+### ⚡ Minimal Mode
+
+**Perfect for:**
+
+-   Experienced developers with existing testing workflows
+-   Quick prototyping and experimentation
+-   Custom setups where you'll add your own tools
+-   Minimal footprint installations
+
+**What's included:**
+
+-   ✅ Core framework files only
+-   ✅ Optimized for custom development
+-   ✅ Smaller footprint
+-   ⚠️ You'll need to add your own test suite
+
+**Installation:**
+
+```bash
+composer create-project eyo/fw-php my-project
+# Choose option [2] when prompted
+```
 
 ```php
 <?php

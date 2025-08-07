@@ -2,32 +2,32 @@
 
 use EyoPHP\Framework\Core\Router;
 
-// Configuration des routes avec le système à 3 niveaux
+// Route configuration with simplified controller names
 $router = new Router();
 
 // ====================================
-// 🌐 ROUTES PUBLIQUES
+// 🌐 PUBLIC ROUTES
 // ====================================
-// Pages d'authentification (accessibles sans connexion)
+// Authentication pages (accessible without login)
 $router->addPublicRoute('GET', BASE_URL, 'AppController', 'homePage');
 $router->addPublicRoute('GET', BASE_URL . 'connexion', 'AppController', 'loginPage');
 $router->addPublicRoute('POST', BASE_URL . 'login', 'AuthController', 'login');
 $router->addPublicRoute('GET', BASE_URL . 'inscription', 'AppController', 'registerPage');
 $router->addPublicRoute('POST', BASE_URL . 'register', 'AuthController', 'register');
 
-// Pages vitrine (accessibles à tous)
+// Public pages (accessible to everyone)
 $router->addPublicRoute('GET', BASE_URL . 'about', 'AppController', 'aboutPage');
 $router->addPublicRoute('GET', BASE_URL . 'contact', 'AppController', 'contactPage');
 
 // ====================================
-// 👤 ROUTES UTILISATEURS
+// 👤 USER ROUTES
 // ====================================
-// Zone utilisateur (nécessite une connexion)
+// User area (requires login)
 $router->addUserRoute('GET', BASE_URL . 'home', 'AppController', 'homePage');
 $router->addUserRoute('GET', BASE_URL . 'logout', 'AuthController', 'logout');
 
 // ====================================
-//  ROUTES DE GESTION D'ERREURS
+// ⚠️ ERROR HANDLING ROUTES
 // ====================================
 $router->addPublicRoute('GET', BASE_URL . 'error/404', 'ErrorController', 'notFound');
 $router->addPublicRoute('GET', BASE_URL . 'error/403', 'ErrorController', 'forbidden');

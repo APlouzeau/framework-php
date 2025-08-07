@@ -2,18 +2,43 @@
 
 > A minimalist and pragmatic PHP framework to quickly start web projects, without the complexity of "over-engineered" solutions
 
-[![Latest Version](https://img.shields.io/packagist/v/aplouzeau/eyophp-framework.svg)](https://packagist.org/packages/aplouzeau/eyophp-framework)
-[![License](https://img.shields.io/packagist/l/aplouzeau/eyophp-framework.svg)](https://packagist.org/packages/aplouzeau/eyophp-framework)
+[![Latest Version](https://img.shields.io/packagist/v/eyo/fw-php.svg)](https://packagist.org/packages/eyo/fw-php)
+[![License](https://img.shields.io/packagist/l/eyo/fw-php.svg)](https://packagist.org/packages/eyo/fw-php)
 
 ## 📦 Installation
 
-### Via Composer (Recommandé)
+### Via Composer Create-Project (Recommended)
+
+EyoPHP Framework offers two installation modes to fit your needs:
 
 ```bash
-composer require aplouzeau/eyophp-framework
+composer create-project eyo/fw-php my-project
 ```
 
-### Utilisation en tant que framework
+After installation, you'll be prompted to choose:
+
+#### � **Complete Mode (Recommended)**
+
+-   Full framework with professional test suite
+-   Example tests demonstrating best practices
+-   Documentation generation tools
+-   Perfect for professional development and learning
+-   Tested, production-ready code examples
+
+#### ⚡ **Minimal Mode**
+
+-   Framework core only for experienced developers
+-   No example tests or documentation tools
+-   Smaller footprint for quick prototyping
+-   You'll add your own comprehensive test suite
+
+### Via Composer Require (Library Mode)
+
+```bash
+composer require eyo/fw-php
+```
+
+### Basic Usage
 
 ```php
 <?php
@@ -22,17 +47,17 @@ require_once 'vendor/autoload.php';
 use EyoPHP\Framework\Framework;
 use EyoPHP\Framework\Core\Router;
 
-// Initialiser le framework
+// Initialize the framework
 Framework::init();
 
-// Votre application...
+// Your application...
 ```
 
-Voir [INSTALL.md](INSTALL.md) pour plus de détails.
+See [INSTALL.md](INSTALL.md) for detailed installation guide.
 
-### Installation manuelle
+### Manual Installation
 
-Clonez ce dépôt pour développer avec l'exemple complet :
+Clone this repository for development with the complete example:
 
 ## 🎯 Why EyoPHP?
 
@@ -53,23 +78,7 @@ Clonez ce dépôt pour développer avec l'exemple complet :
 -   🎓 Perfect for learning or teaching web basics
 -   📦 **Now installable via Composer**
 
-> _"Tired of Symfony/Laravel doing too much? EyoPHP does just what's needed."_
-
-## 🚀 Installation
-
-### Method 1: Composer (Recommended)
-
-```bash
-# Create a new project with Composer
-composer create-project aplouzeau/eyophp-framework my-project
-
-# Or add to existing project
-composer require aplouzeau/eyophp-framework
-```
-
-### Method 2: Git Clone
-
-```bash
+>```bash
 git clone https://github.com/APlouzeau/framework-php.git my-project
 cd my-project
 composer install
@@ -228,26 +237,26 @@ vendor/bin/phpunit
 
 **Résultat:** 8 tests, 10 assertions ✅
 
-### Ce qui est testé
+### What's tested
 
--   ✅ Validation d'email (valide/invalide)
--   ✅ Validation de pseudonyme (longueur, caractères)
--   ✅ Validation de mot de passe (complexité)
--   ✅ Validation multiple (plusieurs champs)
+-   ✅ Email validation (valid/invalid)
+-   ✅ Username validation (length, characters)
+-   ✅ Password validation (complexity)
+-   ✅ Multiple validation (several fields)
 
-**Fichier de test:** `tests/Unit/SimpleValidationTest.php`
+**Test file:** `tests/Unit/SimpleValidationTest.php`
 
 ## 🔧 Makefile Commands
 
-EyoPHP inclut un **Makefile** pour simplifier les tâches courantes :
+EyoPHP includes a **Makefile** to simplify common tasks:
 
 ```bash
-make            # Affiche l'aide
-make install    # Installe les dépendances
-make test       # Lance les tests
-make serve      # Démarre le serveur de développement
-make clean      # Nettoie les fichiers temporaires
-make setup      # Installation complète
+make            # Show help
+make install    # Install dependencies
+make test       # Run tests
+make serve      # Start development server
+make clean      # Clean temporary files
+make setup      # Complete installation
 ```
 
 ## 🏗️ Architecture

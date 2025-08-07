@@ -1,6 +1,6 @@
 {
     "name": "eyo/fw-php",
-    "description": "EyoPHP - Framework PHP éducatif avec système de permissions, routing dynamique et middleware",
+    "description": "EyoPHP - Educational PHP framework with permissions system, dynamic routing and middleware",
     "type": "project",
     "keywords": [
         "php",
@@ -42,8 +42,8 @@
         }
     },
     "suggest": {
-        "phpunit/phpunit": "Pour exécuter les tests du framework et avoir des exemples de tests",
-        "phpdocumentor/shim": "Pour générer la documentation API"
+        "phpunit/phpunit": "To run framework tests and have test examples",
+        "phpdocumentor/shim": "To generate API documentation"
     },
     "extra": {
         "branch-alias": {
@@ -61,6 +61,9 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
+        "post-create-project-cmd": [
+            "php scripts/setup.php"
+        ],
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-html tests/results/coverage --coverage-text",
         "docs": "phpdoc -c phpdoc.xml",
@@ -68,7 +71,7 @@
         "docs-clean": "rm -rf docs/api .phpdoc",
         "docs-setup": [
             "cp docs-template/phpdoc.xml.example phpdoc.xml",
-            "echo 'Configuration PHPDoc copiée ! Éditez phpdoc.xml selon vos besoins.'"
+            "echo 'PHPDoc configuration copied! Edit phpdoc.xml according to your needs.'"
         ]
     }
 }
