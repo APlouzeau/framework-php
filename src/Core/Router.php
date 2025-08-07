@@ -26,6 +26,23 @@ class Router
     }
 
     /**
+     * Résoudre le nom du contrôleur (noms courts vers namespaces complets)
+     * 
+     * @param string $controller Nom du contrôleur (court ou complet)
+     * @return string Namespace complet du contrôleur
+     */
+    private function resolveController(string $controller): string
+    {
+        // Si ça ne contient pas de \, c'est un nom court -> on ajoute le namespace
+        if (strpos($controller, '\\') === false) {
+            return 'EyoPHP\\Framework\\Controller\\' . $controller;
+        }
+
+        // Sinon on retourne tel quel (namespace complet déjà fourni)
+        return $controller;
+    }
+
+    /**
      * Ajouter une route au routeur
      *
      * @param string $method HTTP method (GET, POST, PUT, DELETE)
@@ -36,10 +53,13 @@ class Router
      */
     public function addRoute(string $method, string $path, string $controller, string $action, array $middlewares = []): void
     {
+        // Résoudre automatiquement le nom du contrôleur
+        $resolvedController = $this->resolveController($controller);
+
         $route = [
             'method' => $method,
             'path' => $path,
-            'controller' => $controller,
+            'controller' => $resolvedController,
             'action' => $action,
             'pattern' => $this->compilePattern($path),
             'middlewares' => $middlewares

@@ -14,7 +14,7 @@ class AppController
     {
         $this->renderView('login', [
             'title' => 'Connexion',
-            'message' => 'Bienvenue sur EyoPHP Framework'
+            'description' => 'Connectez-vous à votre compte EyoPHP Framework pour accéder à votre espace personnel'
         ]);
     }
 
@@ -25,7 +25,7 @@ class AppController
     {
         $this->renderView('register', [
             'title' => 'Inscription',
-            'message' => 'Créer votre compte'
+            'description' => 'Créez votre compte gratuit sur EyoPHP Framework et commencez à développer vos projets web'
         ]);
     }
 
@@ -36,6 +36,7 @@ class AppController
     {
         $this->renderView('home', [
             'title' => 'Accueil',
+            'description' => 'Tableau de bord EyoPHP Framework - Gérez vos projets et accédez à toutes les fonctionnalités',
             'user' => $_SESSION['user'] ?? null
         ]);
     }
@@ -47,6 +48,7 @@ class AppController
     {
         $this->renderView('about', [
             'title' => 'À propos',
+            'description' => 'Découvrez EyoPHP Framework v0.1.0 - Un framework PHP éducatif, minimaliste et moderne pour apprendre le développement web',
             'framework' => 'EyoPHP Framework v0.1.0'
         ]);
     }
@@ -57,17 +59,8 @@ class AppController
     public function contactPage()
     {
         $this->renderView('contact', [
-            'title' => 'Contact'
-        ]);
-    }
-
-    /**
-     * Page Tarifs
-     */
-    public function pricingPage()
-    {
-        $this->renderView('pricing', [
-            'title' => 'Nos tarifs'
+            'title' => 'Contact',
+            'description' => 'Contactez l\'équipe EyoPHP Framework pour vos questions, suggestions ou support technique'
         ]);
     }
 
