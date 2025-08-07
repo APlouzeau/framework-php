@@ -55,10 +55,10 @@ class MiddlewareManager
     }
 
     /**
-     * Exécuter les middlewares avant le contrôleur
+     * Execute middlewares before controller
      *
-     * @param array $request Données de la requête
-     * @return bool True pour continuer, False pour arrêter
+     * @param array $request Request data
+     * @return bool True to continue, False to stop
      */
     public static function runBefore(array $request): bool
     {
@@ -77,16 +77,16 @@ class MiddlewareManager
     }
 
     /**
-     * Exécuter les middlewares après le contrôleur
+     * Execute middlewares after controller
      *
-     * @param array $request Données de la requête
-     * @param mixed $response Réponse du contrôleur
+     * @param array $request Request data
+     * @param mixed $response Controller response
      */
     public static function runAfter(array $request, mixed $response = null): void
     {
         $middlewares = self::getMiddlewaresForRequest($request);
 
-        // Exécuter dans l'ordre inverse (LIFO)
+        // Execute in reverse order (LIFO)
         foreach (array_reverse($middlewares) as $middlewareClass) {
             $middleware = new $middlewareClass();
             $middleware->after($request, $response);
@@ -94,16 +94,16 @@ class MiddlewareManager
     }
 
     /**
-     * Obtenir tous les middlewares pour une requête
+     * Get all middlewares for a request
      *
-     * @param array $request Données de la requête
-     * @return array Liste des classes middleware
+     * @param array $request Request data
+     * @return array List of middleware classes
      */
     private static function getMiddlewaresForRequest(array $request): array
     {
         $middlewares = self::$globalMiddlewares;
 
-        // Ajouter les middlewares spécifiques à la route
+        // Add route-specific middlewares
         if (isset($request['path'])) {
             $routePath = $request['path'];
             if (isset(self::$routeMiddlewares[$routePath])) {
@@ -115,9 +115,9 @@ class MiddlewareManager
     }
 
     /**
-     * Obtenir la liste des middlewares enregistrés
+     * Get the list of registered middlewares
      *
-     * @return array Middlewares globaux et par route
+     * @return array Global and route-specific middlewares
      */
     public static function getRegisteredMiddlewares(): array
     {

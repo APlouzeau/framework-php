@@ -3,10 +3,10 @@
 namespace EyoPHP\Framework\Validation;
 
 /**
- * Validator - Classe de validation des données
+ * Validator - Data validation class
  *
- * Cette classe fournit des méthodes statiques pour valider différents types de données
- * utilisées dans l'application EyoPHP (emails, mots de passe, pseudos, etc.)
+ * This class provides static methods to validate different types of data
+ * used in EyoPHP application (emails, passwords, usernames, etc.)
  *
  * @package EyoPHP\Framework\Validation
  * @author  Alexandre PLOUZEAU
@@ -15,12 +15,12 @@ namespace EyoPHP\Framework\Validation;
 class Validator
 {
     /**
-     * Valide une adresse email
+     * Validate an email address
      *
-     * Vérifie qu'une adresse email est valide selon les standards RFC
+     * Checks that an email address is valid according to RFC standards
      *
-     * @param string $email L'adresse email à valider
-     * @return array Tableau avec 'code' (0|1) et 'message' (string)
+     * @param string $email The email address to validate
+     * @return array Array with 'code' (0|1) and 'message' (string)
      */
     public static function validateEmail(string $email): array
     {
