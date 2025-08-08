@@ -48,29 +48,43 @@ class FrameworkSetup
         echo "   ✅ Core framework only\n";
         echo "   ✅ Smaller footprint\n\n";
 
-        // Check if we can read from STDIN
-        if (!is_resource(STDIN) || !stream_isatty(STDIN)) {
-            echo "Non-interactive environment detected. Using Complete Mode by default.\n";
-            return 'complete';
-        }
-
-        for ($attempts = 0; $attempts < 3; $attempts++) {
-            echo "Enter your choice [1/2]: ";
-            $input = trim(fgets(STDIN));
-
-            if ($input === '1' || strtolower($input) === 'complete') {
+        // Simple and universal approach
+        for ($i = 0; $i < 3; $i++) {
+            echo "Enter your choice [1/2] (or press Enter for Complete): ";
+            
+            // Universal input reading that works on all platforms
+            $handle = fopen('php://stdin', 'r');
+            if ($handle === false) {
+                echo "Cannot read input. Using Complete Mode.\n";
                 return 'complete';
             }
-            if ($input === '2' || strtolower($input) === 'minimal') {
+            
+            $input = fgets($handle);
+            fclose($handle);
+            
+            if ($input === false) {
+                echo "Input error. Using Complete Mode.\n";
+                return 'complete';
+            }
+            
+            $choice = trim($input);
+            
+            // Empty input = default to Complete
+            if ($choice === '' || $choice === '1') {
+                return 'complete';
+            }
+            
+            if ($choice === '2') {
                 return 'minimal';
             }
-
-            echo "❌ Invalid choice. Please enter 1 or 2.\n";
+            
+            echo "❌ Please enter 1, 2, or press Enter for default.\n";
         }
-
-        echo "Using Complete Mode as default.\n";
+        
+        echo "Using Complete Mode after 3 attempts.\n";
         return 'complete';
     }
+
     private function setupMinimalMode()
     {
         echo "\n⚡ Setting up Minimal Mode...\n";
