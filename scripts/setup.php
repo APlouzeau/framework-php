@@ -48,20 +48,29 @@ class FrameworkSetup
         echo "   ✅ Core framework only\n";
         echo "   ✅ Smaller footprint\n\n";
 
-        while (true) {
+        // Check if we can read from STDIN
+        if (!is_resource(STDIN) || !stream_isatty(STDIN)) {
+            echo "Non-interactive environment detected. Using Complete Mode by default.\n";
+            return 'complete';
+        }
+
+        for ($attempts = 0; $attempts < 3; $attempts++) {
             echo "Enter your choice [1/2]: ";
             $input = trim(fgets(STDIN));
 
             if ($input === '1' || strtolower($input) === 'complete') {
                 return 'complete';
-            } elseif ($input === '2' || strtolower($input) === 'minimal') {
-                return 'minimal';
-            } else {
-                echo "❌ Invalid choice. Please enter 1 or 2.\n";
             }
-        }
-    }
+            if ($input === '2' || strtolower($input) === 'minimal') {
+                return 'minimal';
+            }
 
+            echo "❌ Invalid choice. Please enter 1 or 2.\n";
+        }
+
+        echo "Using Complete Mode as default.\n";
+        return 'complete';
+    }
     private function setupMinimalMode()
     {
         echo "\n⚡ Setting up Minimal Mode...\n";
