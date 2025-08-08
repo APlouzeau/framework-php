@@ -74,9 +74,17 @@ class FrameworkSetup
         echo "   ✅ Core framework only\n";
         echo "   ✅ Smaller footprint\n\n";
 
-        // Try readline first (more robust for interactive input)
+        // Check for environment variable first
+        $envMode = getenv('EYOPHP_MODE');
+        if ($envMode && ($envMode === 'minimal' || $envMode === 'complete')) {
+            echo "🌍 Using environment variable EYOPHP_MODE: $envMode\n";
+            return $envMode;
+        }
+
+        // Force interaction even in Composer - try readline first
         if (function_exists('readline')) {
-            echo "💡 Pro tip: You can also use arguments later: php scripts/setup.php minimal\n\n";
+            echo "💡 Pro tip: You can also use arguments: php scripts/setup.php minimal\n";
+            echo "🌍 Or set environment: EYOPHP_MODE=minimal\n\n";
 
             $input = readline("Enter your choice [1/2] (or press Enter for Complete): ");
 
@@ -87,18 +95,11 @@ class FrameworkSetup
             return 'complete';
         }
 
-        // Check if we're run by Composer and can't interact properly
-        if ($this->isRunByComposer()) {
-            echo "🤖 Detected installation via Composer (no readline support).\n";
-            echo "📦 Installing Complete Mode by default.\n\n";
-            echo "💡 To choose a different mode after installation:\n";
-            echo "   php scripts/setup.php minimal    # For Minimal Mode\n";
-            echo "   php scripts/setup.php complete   # For Complete Mode\n\n";
-            return 'complete';
-        }
+        // Try regular input
+        echo "💡 Pro tip: You can also use arguments: php scripts/setup.php minimal\n";
+        echo "🌍 Or set environment: EYOPHP_MODE=minimal\n\n";
+        echo "Enter your choice [1/2] (or press Enter for Complete): ";
 
-        // Final fallback with regular fgets
-        echo "Enter your choice [1/2]: ";
         $input = trim(fgets(STDIN));
 
         if ($input === '2' || strtolower($input) === 'minimal') {
@@ -106,32 +107,6 @@ class FrameworkSetup
         }
 
         return 'complete';
-    }
-    private function isRunByComposer()
-    {
-        // More reliable detection of Composer environment
-        return getenv('COMPOSER_BINARY') !== false ||
-            getenv('COMPOSER') !== false ||
-            isset($_SERVER['COMPOSER_BINARY']) ||
-            isset($_SERVER['COMPOSER']) ||
-            // Check if parent process might be composer
-            (function_exists('posix_getppid') && $this->isComposerProcess());
-    }
-
-    private function isComposerProcess()
-    {
-        if (!function_exists('posix_getppid')) {
-            return false;
-        }
-
-        // This is a simple heuristic - not perfect but better
-        $parentPid = posix_getppid();
-        if ($parentPid <= 1) {
-            return false;
-        }
-
-        // On Windows this won't work, but that's OK, we have other checks
-        return false;
     }
 
     private function setupMinimalMode()
