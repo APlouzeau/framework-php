@@ -2,6 +2,7 @@
     "name": "eyo/fw-php",
     "description": "EyoPHP - Educational PHP framework with permissions system, dynamic routing and middleware",
     "type": "project",
+    "version": "0.1.3",
     "keywords": [
         "php",
         "framework",

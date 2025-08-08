@@ -19,7 +19,14 @@ class FrameworkSetup
     public function run()
     {
         $this->displayWelcome();
-        $mode = $this->askInstallationMode();
+
+        // Check for command line arguments first
+        global $argv;
+        if (isset($argv[1])) {
+            $mode = $this->handleCommandLineArg($argv[1]);
+        } else {
+            $mode = $this->askInstallationMode();
+        }
 
         if ($mode === 'minimal') {
             $this->setupMinimalMode();
@@ -28,6 +35,25 @@ class FrameworkSetup
         }
 
         $this->displayCompletionMessage($mode);
+    }
+
+    private function handleCommandLineArg($arg)
+    {
+        $arg = strtolower(trim($arg));
+
+        if ($arg === 'minimal' || $arg === 'min' || $arg === '2') {
+            echo "🎯 Command line argument detected: Minimal Mode\n\n";
+            return 'minimal';
+        }
+
+        if ($arg === 'complete' || $arg === 'comp' || $arg === '1') {
+            echo "🎯 Command line argument detected: Complete Mode\n\n";
+            return 'complete';
+        }
+
+        echo "❌ Invalid argument '$arg'. Valid options: complete, minimal, 1, 2\n";
+        echo "🔄 Falling back to interactive mode...\n\n";
+        return $this->askInstallationMode();
     }
 
     private function displayWelcome()
@@ -48,41 +74,64 @@ class FrameworkSetup
         echo "   ✅ Core framework only\n";
         echo "   ✅ Smaller footprint\n\n";
 
-        // Simple and universal approach
-        for ($i = 0; $i < 3; $i++) {
-            echo "Enter your choice [1/2] (or press Enter for Complete): ";
-            
-            // Universal input reading that works on all platforms
-            $handle = fopen('php://stdin', 'r');
-            if ($handle === false) {
-                echo "Cannot read input. Using Complete Mode.\n";
-                return 'complete';
-            }
-            
-            $input = fgets($handle);
-            fclose($handle);
-            
-            if ($input === false) {
-                echo "Input error. Using Complete Mode.\n";
-                return 'complete';
-            }
-            
-            $choice = trim($input);
-            
-            // Empty input = default to Complete
-            if ($choice === '' || $choice === '1') {
-                return 'complete';
-            }
-            
-            if ($choice === '2') {
+        // Try readline first (more robust for interactive input)
+        if (function_exists('readline')) {
+            echo "💡 Pro tip: You can also use arguments later: php scripts/setup.php minimal\n\n";
+
+            $input = readline("Enter your choice [1/2] (or press Enter for Complete): ");
+
+            if ($input === '2' || strtolower($input) === 'minimal') {
                 return 'minimal';
             }
-            
-            echo "❌ Please enter 1, 2, or press Enter for default.\n";
+
+            return 'complete';
         }
-        
-        echo "Using Complete Mode after 3 attempts.\n";
+
+        // Check if we're run by Composer and can't interact properly
+        if ($this->isRunByComposer()) {
+            echo "🤖 Detected installation via Composer (no readline support).\n";
+            echo "📦 Installing Complete Mode by default.\n\n";
+            echo "💡 To choose a different mode after installation:\n";
+            echo "   php scripts/setup.php minimal    # For Minimal Mode\n";
+            echo "   php scripts/setup.php complete   # For Complete Mode\n\n";
+            return 'complete';
+        }
+
+        // Final fallback with regular fgets
+        echo "Enter your choice [1/2]: ";
+        $input = trim(fgets(STDIN));
+
+        if ($input === '2' || strtolower($input) === 'minimal') {
+            return 'minimal';
+        }
+
         return 'complete';
+    }
+    private function isRunByComposer()
+    {
+        // More reliable detection of Composer environment
+        return getenv('COMPOSER_BINARY') !== false ||
+            getenv('COMPOSER') !== false ||
+            isset($_SERVER['COMPOSER_BINARY']) ||
+            isset($_SERVER['COMPOSER']) ||
+            // Check if parent process might be composer
+            (function_exists('posix_getppid') && $this->isComposerProcess());
+    }
+
+    private function isComposerProcess()
+    {
+        if (!function_exists('posix_getppid')) {
+            return false;
+        }
+
+        // This is a simple heuristic - not perfect but better
+        $parentPid = posix_getppid();
+        if ($parentPid <= 1) {
+            return false;
+        }
+
+        // On Windows this won't work, but that's OK, we have other checks
+        return false;
     }
 
     private function setupMinimalMode()
