@@ -25,7 +25,11 @@ class FrameworkSetup
         if (isset($argv[1])) {
             $mode = $this->handleCommandLineArg($argv[1]);
         } else {
-            $mode = $this->askInstallationMode();
+            // Try to detect mode from project folder name (creative approach!)
+            $mode = $this->detectModeFromProjectName();
+            if (!$mode) {
+                $mode = $this->askInstallationMode();
+            }
         }
 
         if ($mode === 'minimal') {
@@ -35,6 +39,28 @@ class FrameworkSetup
         }
 
         $this->displayCompletionMessage($mode);
+    }
+
+    private function detectModeFromProjectName()
+    {
+        // Get the project directory name
+        $projectDir = basename($this->projectRoot);
+
+        // Check if the project name contains "minimal"
+        if (strpos(strtolower($projectDir), 'minimal') !== false) {
+            echo "🎯 Detected 'minimal' in project name '$projectDir'\n";
+            echo "🚀 Auto-selecting Minimal Mode!\n\n";
+            return 'minimal';
+        }
+
+        // Check if the project name contains "complete" 
+        if (strpos(strtolower($projectDir), 'complete') !== false) {
+            echo "🎯 Detected 'complete' in project name '$projectDir'\n";
+            echo "🚀 Auto-selecting Complete Mode!\n\n";
+            return 'complete';
+        }
+
+        return null; // No auto-detection, ask user
     }
 
     private function handleCommandLineArg($arg)

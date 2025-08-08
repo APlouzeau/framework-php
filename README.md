@@ -20,20 +20,45 @@ Open [http://localhost:8000](http://localhost:8000) → You have a working app w
 
 ## 📦 Installation
 
-### Option 1: New Project (Recommended)
+### Choose Your Installation Mode
+
+**🎯 Complete Mode (Recommended for beginners)**
+
+-   Full test suite, examples, and documentation tools
+-   Perfect for learning and development
 
 ```bash
 composer create-project eyo/fw-php my-project
-cd my-project
+# OR force complete mode
+EYOPHP_MODE=complete composer create-project eyo/fw-php my-project
 ```
 
-### Option 2: Add to Existing Project
+**⚡ Minimal Mode (Production-ready)**
+
+-   Core framework only, optimized footprint
+-   Best for custom development and production
+
+```bash
+EYOPHP_MODE=minimal composer create-project eyo/fw-php my-project
+```
+
+**🔧 Change Mode Later**
+
+```bash
+cd my-project
+php scripts/setup.php minimal    # Switch to minimal
+php scripts/setup.php complete   # Switch to complete
+```
+
+### Alternative Installation Methods
+
+**Option 2: Add to Existing Project**
 
 ```bash
 composer require eyo/fw-php
 ```
 
-### Option 3: Git Clone
+**Option 3: Git Clone**
 
 ```bash
 git clone https://github.com/APlouzeau/framework-php.git my-project
