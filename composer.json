@@ -64,8 +64,8 @@
         "post-create-project-cmd": [
             "php scripts/setup.php"
         ],
-        "test": "phpunit",
-        "test-coverage": "phpunit --coverage-html tests/results/coverage --coverage-text",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html tests/results/coverage --coverage-text",
         "docs": "phpdoc -c phpdoc.xml",
         "docs-serve": "php -S localhost:8080 -t docs/api",
         "docs-clean": "rm -rf docs/api .phpdoc",

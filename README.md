@@ -1,84 +1,41 @@
 # 🚀 EyoPHP Framework
 
-> A minimalist and pragmatic PHP framework to quickly start web projects, without the complexity of "over-engineered" solutions
+> A minimalist PHP framework that gets you from zero to working web app in 5 minutes
 
 [![Latest Version](https://img.shields.io/packagist/v/eyo/fw-php.svg)](https://packagist.org/packages/eyo/fw-php)
 [![License](https://img.shields.io/packagist/l/eyo/fw-php.svg)](https://packagist.org/packages/eyo/fw-php)
 
+> 🇫🇷 **Note for French learners**: This framework was created by a French developer for educational purposes. While documentation is in English for international reach, you'll find extensive French comments in the code and detailed French tutorials in the `/docs` folder.
+
+## ⚡ Quick Start
+
+Get a working web application in 2 commands:
+
+```bash
+composer create-project eyo/fw-php my-app
+cd my-app && php -S localhost:8000 -t public
+```
+
+Open [http://localhost:8000](http://localhost:8000) → You have a working app with authentication! 🎉
+
 ## 📦 Installation
 
-### Via Composer Create-Project (Recommended)
-
-EyoPHP Framework offers two installation modes to fit your needs:
+### Option 1: New Project (Recommended)
 
 ```bash
 composer create-project eyo/fw-php my-project
+cd my-project
 ```
 
-After installation, you'll be prompted to choose:
-
-#### � **Complete Mode (Recommended)**
-
--   Full framework with professional test suite
--   Example tests demonstrating best practices
--   Documentation generation tools
--   Perfect for professional development and learning
--   Tested, production-ready code examples
-
-#### ⚡ **Minimal Mode**
-
--   Framework core only for experienced developers
--   No example tests or documentation tools
--   Smaller footprint for quick prototyping
--   You'll add your own comprehensive test suite
-
-### Via Composer Require (Library Mode)
+### Option 2: Add to Existing Project
 
 ```bash
 composer require eyo/fw-php
 ```
 
-### Basic Usage
+### Option 3: Git Clone
 
-```php
-<?php
-require_once 'vendor/autoload.php';
-
-use EyoPHP\Framework\Framework;
-use EyoPHP\Framework\Core\Router;
-
-// Initialize the framework
-Framework::init();
-
-// Your application...
-```
-
-See [INSTALL.md](INSTALL.md) for detailed installation guide.
-
-### Manual Installation
-
-Clone this repository for development with the complete example:
-
-## 🎯 Why EyoPHP?
-
-**The absolute basics of a modern PHP website:**
-
--   ✅ **Functional homepage** right after installation
--   ✅ **Complete authentication system** (registration/login)
--   ✅ **Simple and readable router**
--   ✅ **Clear MVC structure** without excessive abstraction
--   ✅ **Ready-to-use database** with SQL script provided
--   ✅ **PSR-4 autoloading** and Composer support
-
-**Philosophy: Keep it essential**
-
--   🎯 Pure PHP, no "black magic"
--   ⚡ Up and running in 5 minutes
--   🧠 Code you master 100%
--   🎓 Perfect for learning or teaching web basics
--   📦 **Now installable via Composer**
-
->```bash
+```bash
 git clone https://github.com/APlouzeau/framework-php.git my-project
 cd my-project
 composer install
@@ -86,390 +43,341 @@ composer install
 
 ## ⚙️ Configuration
 
-**Important:** EyoPHP uses **phpdotenv** for environment management.
+### 1. Environment Setup
 
 ```bash
-# Copy configuration file
+# Copy the environment template
 cp .env.example .env
 
-# Edit .env with your parameters
+# Edit your database credentials
+# .env
 DB_HOST=localhost
 DB_NAME=my_project
 DB_USER=root
-DB_PSW=password
+DB_PSW=your_password
 ```
 
-> **Note:** Never commit your `.env` file to version control. The `.env.example` provides a template.
-
-### Install dependencies
+### 2. Database Setup
 
 ```bash
-# With Makefile (recommended)
-make install
-
-# Manual
-composer install
-```
-
-### Import database
-
-```bash
-# Create database and import schema
+# Import the provided SQL schema
 mysql -u root -p < database/users.sql
 ```
 
-### Bootstrap the framework
+### 3. Start Development Server
+
+```bash
+php -S localhost:8000 -t public
+```
+
+Visit [http://localhost:8000](http://localhost:8000) and you're ready! 🚀
+
+## 🎯 Why EyoPHP?
+
+**Perfect for learning, teaching, and rapid prototyping**
+
+### ✅ **What you get out of the box:**
+
+-   🏠 **Working homepage** immediately after installation
+-   🔐 **Complete authentication** (register/login/logout)
+-   🛣️ **Simple routing** with clean URLs
+-   🗃️ **Database integration** with PDO
+-   📁 **MVC structure** without over-engineering
+-   🔒 **User permissions** system
+-   ✅ **Input validation** with customizable rules
+-   🎨 **Template system** with layouts
+-   🧪 **PHPUnit tests** included
+
+### 🎓 **Educational Philosophy:**
+
+-   **Pure PHP** - No magic, you understand every line
+-   **Modern standards** - PSR-4 autoloading, Composer, .env
+-   **Real-world patterns** - MVC, Router, Middleware
+-   **Progressive learning** - Start simple, add complexity when needed
+
+### 🚀 **Developer Experience:**
+
+```php
+// Simple routing with permission levels
+$router->addPublicRoute('GET', BASE_URL . 'about', 'EyoPHP\\Framework\\Controller\\AppController', 'aboutPage');
+$router->addUserRoute('GET', BASE_URL . 'home', 'EyoPHP\\Framework\\Controller\\AppController', 'homePage');
+
+// Easy database access
+$user = UserModel::findByEmail($email);
+
+// Clean validation
+$validator = new Validator($data);
+$validator->required('email')->email();
+```
+
+## 📁 Project Structure
+
+```
+my-project/
+├── public/                # Web root
+│   ├── index.php         # Application entry point
+│   └── .htaccess         # URL rewriting rules
+├── src/                  # Framework core (PSR-4)
+│   ├── Controller/       # Application controllers
+│   ├── Model/           # Data models
+│   ├── Core/            # Framework core classes
+│   └── Validation/      # Input validation
+├── views/               # HTML templates
+│   ├── head.php         # HTML head
+│   ├── header.php       # Site header
+│   ├── home.php         # Homepage
+│   └── footer.php       # Site footer
+├── config/              # Configuration files
+│   ├── config.php       # Main configuration
+│   ├── routes.php       # Route definitions
+│   └── middleware.php   # Middleware setup
+├── database/            # SQL scripts
+│   └── users.sql        # User table schema
+├── .env.example         # Environment template
+└── composer.json        # Dependencies
+```
+
+## 🛠️ Key Features
+
+### **Router with Clean URLs**
+
+```php
+// config/routes.php - Real EyoPHP routing system
+$router->addPublicRoute('GET', BASE_URL, 'EyoPHP\\Framework\\Controller\\AppController', 'homePage');
+$router->addPublicRoute('GET', BASE_URL . 'about', 'EyoPHP\\Framework\\Controller\\AppController', 'aboutPage');
+$router->addPublicRoute('POST', BASE_URL . 'login', 'EyoPHP\\Framework\\Controller\\AuthController', 'login');
+$router->addUserRoute('GET', BASE_URL . 'home', 'EyoPHP\\Framework\\Controller\\AppController', 'homePage');
+```
+
+### **Database with PDO**
+
+```php
+// src/Model/UserModel.php - Real EyoPHP method
+public function findByEmail(string $email): ?User
+{
+    $query = "SELECT * FROM users WHERE email = :email";
+    $stmt = $this->db->prepare($query);
+    $stmt->execute(['email' => $email]);
+    $result = $stmt->fetch();
+    return $result ? User::fromArray($result) : null;
+}
+```
+
+### **Permission-Based Routing**
+
+```php
+// EyoPHP's unique 3-level permission system
+$router->addPublicRoute('GET', BASE_URL . 'about', 'Controller', 'method');     // Anyone can access
+$router->addUserRoute('GET', BASE_URL . 'profile', 'Controller', 'method');    // Logged users only
+$router->addAdminRoute('GET', BASE_URL . 'admin', 'Controller', 'method');     // Admins only
+```
+
+### **Input Validation**
+
+```php
+// Validate user registration
+$validator = new Validator($_POST);
+$validator->required('email')->email()
+          ->required('password')->minLength(8)
+          ->required('name')->minLength(2);
+
+if ($validator->isValid()) {
+    // Process registration
+}
+```
+
+### **Template System**
+
+```php
+// src/Controller/AppController.php - Real method
+public function homePage(): void
+{
+    $this->renderView('home', [
+        'title' => 'Welcome to EyoPHP',
+        'message' => 'Your framework is ready!'
+    ]);
+}
+```
+
+## 🚀 Usage Examples
+
+### Creating a New Controller
 
 ```php
 <?php
-// In your main index.php or bootstrap file
-require_once 'vendor/autoload.php'; // Composer autoloader
-require_once 'bootstrap.php';       // EyoPHP bootstrap
+namespace EyoPHP\Framework\Controller;
 
-// Or if installed via Composer
-require_once 'vendor/aplouzeau/eyophp-framework/bootstrap.php';
-```
+class ProductController
+{
+    public function listProducts(): void
+    {
+        // Example: Get products from database
+        $products = [
+            ['id' => 1, 'name' => 'Product 1', 'price' => 99.99],
+            ['id' => 2, 'name' => 'Product 2', 'price' => 149.99]
+        ];
 
-### 5a. Start server (Development - Quick)
-
-```bash
-# With Makefile (recommended)
-make serve
-
-# Manual
-php -S localhost:8000 -t public/
-```
-
-### 5b. Production server setup (Apache/Nginx)
-
-<details>
-<summary>Click to expand server configuration</summary>
-
-**Apache Virtual Host:**
-
-```apache
-<VirtualHost *:80>
-    ServerName my-project.local
-    DocumentRoot /path/to/my-project/public
-
-    <Directory /path/to/my-project/public>
-        AllowOverride All
-        Require all granted
-        DirectoryIndex index.php
-    </Directory>
-
-    # Optional: Enable rewrite module for clean URLs
-    RewriteEngine On
-</VirtualHost>
-```
-
-**.htaccess file** (create in `public/.htaccess`):
-
-```apache
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
-```
-
-**Nginx configuration:**
-
-```nginx
-server {
-    listen 80;
-    server_name my-project.local;
-    root /path/to/my-project/public;
-    index index.php;
-
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
+        $this->renderView('products/list', [
+            'title' => 'Our Products',
+            'products' => $products
+        ]);
     }
 
-    location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
+    public function showProduct(int $id): void
+    {
+        // Example: Get single product
+        $product = ['id' => $id, 'name' => 'Product ' . $id, 'price' => 99.99];
 
-    # Security: deny access to sensitive files
-    location ~ /\.(env|git) {
-        deny all;
+        $this->renderView('products/show', [
+            'title' => 'Product Details',
+            'product' => $product
+        ]);
     }
 }
 ```
 
-**Don't forget:**
+### Adding Routes
 
--   Add `127.0.0.1 my-project.local` to your `/etc/hosts` file (Linux/Mac) or `C:\Windows\System32\drivers\etc\hosts` (Windows)
--   Restart your web server after configuration changes
--   Ensure PHP modules are enabled: `mod_rewrite` (Apache) or `php-fpm` (Nginx)
+```php
+// config/routes.php - Add your new routes
+$router->addPublicRoute('GET', BASE_URL . 'products', 'EyoPHP\\Framework\\Controller\\ProductController', 'listProducts');
+$router->addPublicRoute('GET', BASE_URL . 'products/{id}', 'EyoPHP\\Framework\\Controller\\ProductController', 'showProduct');
 
-</details>
-
-### 6. You're all set! 🎉
-
-**Access your application:**
-
--   **Development server:** `http://localhost:8000`
--   **Apache/Nginx server:** `http://my-project.local` (after virtual host setup)
-
-**You now have:**
-
--   A homepage
--   A registration form (`/inscription` or `/register`)
--   A login form (`/connexion` or `/login`)
--   Ready-to-use test accounts (admin/admin123, moderator/mod123, testuser/user123)
-
-## 🧪 Testing (Simple)
-
-EyoPHP includes **PHPUnit** avec un exemple simple pour s'assurer que les validations fonctionnent.
-
-### Lancer les tests
-
-```bash
-# Avec Makefile (recommandé)
-make test
-
-# Manuel
-vendor/bin/phpunit
+// User-only routes (require login)
+$router->addUserRoute('GET', BASE_URL . 'dashboard', 'EyoPHP\\Framework\\Controller\\AppController', 'dashboard');
 ```
 
-**Résultat:** 8 tests, 10 assertions ✅
-
-### What's tested
-
--   ✅ Email validation (valid/invalid)
--   ✅ Username validation (length, characters)
--   ✅ Password validation (complexity)
--   ✅ Multiple validation (several fields)
-
-**Test file:** `tests/Unit/SimpleValidationTest.php`
-
-## 🔧 Makefile Commands
-
-EyoPHP includes a **Makefile** to simplify common tasks:
-
-```bash
-make            # Show help
-make install    # Install dependencies
-make test       # Run tests
-make serve      # Start development server
-make clean      # Clean temporary files
-make setup      # Complete installation
-```
-
-## 🏗️ Architecture
-
-```
-📁 config/          # Configuration & routing
-├── config.php      # Environment variables
-└── router.php      # Route definitions
-
-📁 class/           # Utility classes
-├── ClassRouter.php # Route handler
-├── ClassDatabase.php # PDO connection
-└── ClassValidator.php # Data validation
-
-📁 controller/      # Business logic
-├── ControllerAppPages.php # Main pages
-└── ControllerUser.php     # User management
-
-📁 model/           # Data access
-├── ModelUser.php   # User SQL queries
-└── EntitieUser.php # User entity
-
-📁 views/           # PHP templates
-├── head.php, header.php, footer.php # Layout
-├── home.php        # Homepage
-├── login.php       # Login form
-└── register.php    # Registration form
-
-📁 public/          # Web entry point
-├── index.php       # Application bootstrap
-├── styles.css      # Base CSS
-└── script.js       # Base JS
-
-📁 database/        # SQL scripts
-└── users.sql       # Initial schema
-```
-
-## 📖 Usage Guide
-
-### Using the Framework (v2.0+)
-
-EyoPHP v2.0 now supports modern PHP with PSR-4 autoloading and namespaces:
+### Creating a Model
 
 ```php
 <?php
-// Modern namespaced usage (recommended)
-use EyoPHP\Framework\Core\Router;
+namespace EyoPHP\Framework\Model;
+
 use EyoPHP\Framework\Core\Database;
-use EyoPHP\Framework\Validation\Validator;
 
-// Initialize router
-$router = new Router();
+class ProductModel
+{
+    public static function getAll(): array
+    {
+        $db = Database::getInstance();
+        $stmt = $db->query("SELECT * FROM products ORDER BY name ASC");
+        return $stmt->fetchAll();
+    }
 
-// Database singleton
-$db = Database::getInstance();
+    public static function findById(int $id): ?array
+    {
+        $db = Database::getInstance();
+        $stmt = $db->prepare("SELECT * FROM products WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch() ?: null;
+    }
 
-// Validation
-$result = Validator::validateEmail('test@example.com');
-```
-
-**Backward compatibility:** Old class names still work via aliases:
-
-```php
-<?php
-// Legacy class names (still supported)
-$router = new ClassRouter();
-$db = new ClassDatabase();
-$result = ClassValidator::validateEmail('test@example.com');
-```
-
-### Creating a new page
-
-1. **Add the route** in `config/router.php`:
-
-```php
-$router->addRoute('GET', BASE_URL . 'my-page', 'ControllerMyController', 'myMethod');
-```
-
-2. **Create the controller** `controller/ControllerMyController.php`:
-
-```php
-<?php
-class ControllerMyController {
-    public function myMethod() {
-        // Business logic
-        require_once APP_PATH . "views/my-page.php";
+    public static function create(array $data): bool
+    {
+        $db = Database::getInstance();
+        $stmt = $db->prepare("INSERT INTO products (name, price, description) VALUES (:name, :price, :description)");
+        return $stmt->execute([
+            'name' => $data['name'],
+            'price' => $data['price'],
+            'description' => $data['description']
+        ]);
     }
 }
 ```
 
-3. **Create the view** `views/my-page.php`:
+## 🔧 Development Tools
 
-```php
-<?php require_once "head.php"; ?>
-<?php require_once "header.php"; ?>
+### Testing
 
-<h1>My new page</h1>
-<p>Page content...</p>
+```bash
+# Run tests
+composer test
 
-<?php require_once "footer.php"; ?>
+# With coverage
+composer test-coverage
 ```
 
-### Data validation
+### Documentation
 
-The built-in validation system makes form validation easy:
+```bash
+# Generate API docs
+composer docs
 
-```php
-// In your controller
-$validator = new ClassValidator();
-$errors = $validator->validate($_POST, [
-    'nickname' => 'required|min:3|max:20',
-    'email' => 'required|email',
-    'password' => 'required|min:8'
-]);
-
-if (empty($errors)) {
-    // Process valid data
-} else {
-    // Display errors
-}
+# Serve documentation
+composer docs-serve
 ```
 
-### Data access (no ORM)
+### Development Server
 
-The framework encourages using pure SQL for total control:
+```bash
+# Quick start
+php -S localhost:8000 -t public
 
-```php
-// In a model
-class ModelMyModel extends ClassDatabase {
-    public function getUsers() {
-        $stmt = $this->conn->prepare("
-            SELECT u.id_user, u.nickname, u.mail, r.name as role_name
-            FROM users u
-            LEFT JOIN roles r ON u.id_role = r.id_role
-            WHERE r.name = :role
-            ORDER BY u.nickname ASC
-        ");
-        $stmt->bindValue(':role', 'user');
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-}
+# With automatic restart (if you have nodemon)
+nodemon --exec "php -S localhost:8000 -t public" --ext php
 ```
 
-## 🎯 Key Concepts
+## 📚 Learning Path
 
-### 1. Naming convention (Smart autoloader)
+### Beginner
 
--   `ControllerFoo` → `controller/ControllerFoo.php`
--   `ModelBar` → `model/ModelBar.php`
--   `ClassBaz` → `class/ClassBaz.php`
--   `EntitieUser` → `model/EntitieUser.php`
+1. 📖 Follow the Quick Start guide
+2. 🔍 Explore the code structure
+3. 📝 Modify the homepage template
+4. ➕ Add a new route and controller
 
-### 2. Simple and readable routing
+### Intermediate
 
-```php
-// config/router.php
-$router->addRoute('GET', '/users', 'ControllerUser', 'list');
-$router->addRoute('POST', '/users', 'ControllerUser', 'create');
-$router->addRoute('GET', '/users/{id}', 'ControllerUser', 'show');
-```
+1. 🗃️ Create custom models
+2. ✅ Add input validation to forms
+3. 🔐 Implement user permissions
+4. 🧪 Write unit tests
 
-### 3. No ORM = SQL assumed
+### Advanced
 
--   Total control over queries
--   Optimized performance
--   Easy debugging
--   Learning SQL fundamentals
+1. 🔧 Create custom middleware
+2. 📊 Add logging and monitoring
+3. 🚀 Deploy to production
+4. 🔄 Migrate to Symfony/Laravel
 
-## 🛠️ Included Features
+## 🌟 Perfect For
 
--   ✅ **Autoloader** with naming conventions
--   ✅ **Router** with HTTP methods support
--   ✅ **Authentication system** (registration/login/logout)
--   ✅ **Data validation** with customizable rules
--   ✅ **Session management** built-in
--   ✅ **PHP templates** with modular layout
--   ✅ **Environment-based configuration** (phpdotenv)
--   ✅ **SQL scripts** for quick start
--   ✅ **PHPUnit testing** (simple validation tests)
--   ✅ **Makefile** for common tasks
+-   🎓 **Learning PHP** and web development basics
+-   🏫 **Teaching MVC** patterns in schools
+-   ⚡ **Rapid prototyping** of web applications
+-   🔬 **Understanding** how frameworks work internally
+-   🚀 **Starting projects** that might grow into larger frameworks
 
-## 🚧 Roadmap
+## 🚫 Not For You If
 
--   [ ] **CLI installer** via Composer
--   [ ] **Code generators** (controller, model, etc.)
--   [ ] **Simple middleware system**
--   [ ] **File upload handling**
--   [ ] **Simple cache** (file/Redis)
--   [ ] **Structured logging**
--   [x] **Basic unit tests** ✅ (simple validation tests)
+-   You need a battle-tested production framework → Use **Symfony** or **Laravel**
+-   You want advanced features out-of-the-box → Use **CodeIgniter** or **CakePHP**
+-   You're building complex enterprise applications → Use **Zend/Laminas**
 
-## 🎓 Educational Philosophy
+## 🔄 Migration Path
 
-EyoPHP is designed to:
+EyoPHP uses standard PHP patterns. When you're ready to scale:
 
--   **Understand** how a web framework works
--   **Learn** MVC patterns without abstraction
--   **Master** PHP and SQL rather than magic tools
--   **Quickly start** new projects
-
-## 📦 Migration to bigger frameworks
-
-EyoPHP code is intentionally close to standard PHP. Migrating to Symfony or Laravel will be easier after understanding the basics with EyoPHP.
+-   **To Symfony**: Controllers and routing concepts are similar
+-   **To Laravel**: Model and validation patterns translate well
+-   **To any framework**: You'll understand the underlying concepts
 
 ## 🤝 Contributing
 
-This framework is primarily intended for personal and educational use. Improvement suggestions are welcome!
+This framework is designed for educational purposes. Contributions welcome!
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
 ## 📄 License
 
-MIT License - Free to use for your personal and commercial projects.
+MIT License - Free for personal and commercial use.
 
 ---
 
-> _"Simplicity is the ultimate sophistication"_ - Leonardo da Vinci
+> _"The best way to learn how something works is to build it yourself"_
+
+**Ready to start?** Run `composer create-project eyo/fw-php my-app` and begin your journey! 🚀

@@ -1,48 +1,31 @@
 <?php
 
 /**
- * Exemple d'utilisation du framework EyoPHP
+ * EyoPHP Framework - Usage Example
  * 
- * Ce fichier montre comment utiliser le framework comme package Composer
+ * This file demonstrates how to use the EyoPHP Framework
+ * Run: php example.php
  */
 
-require_once 'vendor/autoload.php';
+echo "=== EyoPHP Framework - Usage Example ===\n\n";
 
-use EyoPHP\Framework\Framework;
-use EyoPHP\Framework\Entity\User;
-use EyoPHP\Framework\Validation\Validator;
-use EyoPHP\Framework\Core\Router;
+try {
+    require_once 'vendor/autoload.php';
+    echo "✅ Autoloader loaded successfully\n";
 
-// Initialiser le framework
-Framework::init();
+    $framework = new EyoPHP\Framework\Framework();
+    $framework::init();
+    echo "✅ Framework initialized\n";
 
-echo "=== EyoPHP Framework - Exemple d'utilisation ===\n\n";
+    echo "Version: " . $framework::version() . "\n";
+    echo "Features: MVC, Router, Validation, Authentication\n";
+    echo "\nQuick Setup Guide:\n";
+    echo "• Edit config/config.php for database settings\n";
+    echo "• Start server: php -S localhost:8000 -t public/\n";
+    echo "• Visit: http://localhost:8000\n";
+    echo "• Test pages: /about, /contact, /login\n\n";
+    echo "🚀 EyoPHP Framework is ready to use!\n";
 
-// 1. Utilisation des entités
-echo "1. Création d'un utilisateur :\n";
-$user = new User([
-    'id_user' => 1,
-    'nickname' => 'johndoe',
-    'mail' => 'john.doe@example.com',
-    'id_role' => 1
-]);
-
-echo "Utilisateur créé : {$user->getNickname()} ({$user->getMail()})\n\n";
-
-// 2. Validation des données
-echo "2. Validation des données :\n";
-
-$emailResult = Validator::validateEmail('test@example.com');
-echo "Email 'test@example.com' : " . ($emailResult['code'] ? "✅ Valide" : "❌ Invalide") . "\n";
-
-$emailResult = Validator::validateEmail('email-invalide');
-echo "Email 'email-invalide' : " . ($emailResult['code'] ? "✅ Valide" : "❌ Invalide") . "\n";
-
-$passwordResult = Validator::validatePasswordFormat('MotDePasse123!');
-echo "Mot de passe 'MotDePasse123!' : " . ($passwordResult['code'] ? "✅ Valide" : "❌ Invalide") . "\n\n";
-
-// 3. Information sur le framework
-echo "3. Informations du framework :\n";
-echo "Version : " . Framework::version() . "\n";
-
-echo "\n=== Fin de l'exemple ===\n";
+} catch (Exception $e) {
+    echo "❌ Error: " . $e->getMessage() . "\n";
+}
