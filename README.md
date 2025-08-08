@@ -12,7 +12,11 @@
 Get a working web application in 2 commands:
 
 ```bash
-composer create-project eyo/fw-php my-app
+# Choose your installation mode by project name:
+composer create-project eyo/fw-php my-app-complete    # Full features
+composer create-project eyo/fw-php my-app-minimal     # Lightweight
+composer create-project eyo/fw-php my-app             # Interactive choice
+
 cd my-app && php -S localhost:8000 -t public
 ```
 
@@ -20,40 +24,44 @@ Open [http://localhost:8000](http://localhost:8000) → You have a working app w
 
 ## 📦 Installation
 
-### Choose Your Installation Mode
+### 🧠 Smart Installation (Auto-detects from project name)
 
-**🎯 Complete Mode (Recommended for beginners)**
-
--   Full test suite, examples, and documentation tools
--   Perfect for learning and development
-
+**⚡ Minimal Mode** - Just add `-minimal` to your project name:
 ```bash
-composer create-project eyo/fw-php my-project
-# OR force complete mode
-EYOPHP_MODE=complete composer create-project eyo/fw-php my-project
+composer create-project eyo/fw-php blog-minimal
+composer create-project eyo/fw-php api-minimal  
+composer create-project eyo/fw-php myapp-minimal
 ```
 
-**⚡ Minimal Mode (Production-ready)**
-
--   Core framework only, optimized footprint
--   Best for custom development and production
-
+**📚 Complete Mode** - Add `-complete` to your project name:
 ```bash
-EYOPHP_MODE=minimal composer create-project eyo/fw-php my-project
+composer create-project eyo/fw-php cms-complete
+composer create-project eyo/fw-php website-complete
+composer create-project eyo/fw-php myapp-complete
 ```
 
-**🔧 Change Mode Later**
-
+**🤔 Interactive Choice** - Use any other name:
 ```bash
-cd my-project
+composer create-project eyo/fw-php myproject
+# Will ask you to choose between Complete/Minimal modes
+```
+
+### 🔧 Change Mode Later
+```bash
+cd myproject
 php scripts/setup.php minimal    # Switch to minimal
 php scripts/setup.php complete   # Switch to complete
+```
+
+### 🌍 Advanced: Environment Variables (Optional)
+```bash
+EYOPHP_MODE=minimal composer create-project eyo/fw-php my-project
+EYOPHP_MODE=complete composer create-project eyo/fw-php my-project
 ```
 
 ### Alternative Installation Methods
 
 **Option 2: Add to Existing Project**
-
 ```bash
 composer require eyo/fw-php
 ```

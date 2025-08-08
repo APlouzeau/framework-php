@@ -45,16 +45,17 @@ class FrameworkSetup
     {
         // Get the project directory name
         $projectDir = basename($this->projectRoot);
+        $projectLower = strtolower($projectDir);
 
-        // Check if the project name contains "minimal"
-        if (strpos(strtolower($projectDir), 'minimal') !== false) {
+        // Check if the project name ends with "-minimal" or contains "minimal"
+        if (substr($projectLower, -8) === '-minimal' || strpos($projectLower, 'minimal') !== false) {
             echo "🎯 Detected 'minimal' in project name '$projectDir'\n";
             echo "🚀 Auto-selecting Minimal Mode!\n\n";
             return 'minimal';
         }
 
-        // Check if the project name contains "complete" 
-        if (strpos(strtolower($projectDir), 'complete') !== false) {
+        // Check if the project name ends with "-complete" or contains "complete"
+        if (substr($projectLower, -9) === '-complete' || strpos($projectLower, 'complete') !== false) {
             echo "🎯 Detected 'complete' in project name '$projectDir'\n";
             echo "🚀 Auto-selecting Complete Mode!\n\n";
             return 'complete';
