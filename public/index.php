@@ -1,4 +1,5 @@
 <?php
+
 /**
  * EyoPHP Framework - Point d'entrée principal (Version Fonctionnelle)
  */
@@ -47,23 +48,29 @@ if (preg_match('/\.(css|js|md|txt|json|html|png|jpg|gif|svg)$/', $uri)) {
 
 $handler = $router->getHandler($method, $uri);
 
-if ($handler && isset($handler['controller']) && class_exists($handler['controller'])) {
-    $controller = new $handler['controller']();
-    if (method_exists($controller, $handler['action'])) {
-        // Passer les paramètres de route au contrôleur si disponibles
-        $parameters = $handler['parameters'] ?? [];
-        if (!empty($parameters)) {
-            $controller->{$handler['action']}($parameters);
+try {
+    if ($handler && isset($handler['controller']) && class_exists($handler['controller'])) {
+        $controller = new $handler['controller']();
+        if (method_exists($controller, $handler['action'])) {
+            // Passer les paramètres de route au contrôleur si disponibles
+            $parameters = $handler['parameters'] ?? [];
+            if (!empty($parameters)) {
+                $controller->{$handler['action']}($parameters);
+            } else {
+                $controller->{$handler['action']}();
+            }
         } else {
-            $controller->{$handler['action']}();
+            // Action n'existe pas - 404
+            $controller = new \EyoPHP\Framework\Controller\ErrorController();
+            $controller->notFound();
         }
     } else {
-        // Action n'existe pas - 404
+        // Aucun handler trouvé - 404
         $controller = new \EyoPHP\Framework\Controller\ErrorController();
-        $controller->index($handler, $method, $uri);
+        $controller->notFound();
     }
-} else {
-    // Aucun handler trouvé - 404
+} catch (\Throwable $exception) {
+    // Erreur 500 - Internal Server Error
     $controller = new \EyoPHP\Framework\Controller\ErrorController();
-    $controller->index(null, $method, $uri);
+    $controller->serverError($exception);
 }

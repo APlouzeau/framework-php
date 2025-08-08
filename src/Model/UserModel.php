@@ -7,14 +7,21 @@ use EyoPHP\Framework\Entity\User;
 use PDO;
 
 /**
- * UserModel - Gestion des utilisateurs en base de données
+ * UserModel - User management in database
  *
  * @package EyoPHP\Framework\Model
  * @author  Alexandre PLOUZEAU
  * @version 2.0.0
  */
-class UserModel extends Database
+class UserModel
 {
+    /**
+     * Get PDO connection
+     */
+    private function getConnection(): PDO
+    {
+        return Database::getInstance();
+    }
     /**
      * Register a new user
      */

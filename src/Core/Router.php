@@ -5,9 +5,9 @@ namespace EyoPHP\Framework\Core;
 use EyoPHP\Framework\Middleware\MiddlewareManager;
 
 /**
- * Router - Système de routage avec support des paramètres dynamiques
+ * Router - Routing system with dynamic parameters support
  *
- * Supporte les routes avec paramètres comme /user/{id} ou /post/{slug}
+ * Supports routes with parameters like /user/{id} or /post/{slug}
  *
  * @package EyoPHP\Framework\Core
  * @author  Alexandre PLOUZEAU
@@ -16,7 +16,7 @@ use EyoPHP\Framework\Middleware\MiddlewareManager;
 class Router
 {
     /**
-     * @var array Liste des routes enregistrées
+     * @var array List of registered routes
      */
     private array $routes;
 
@@ -26,7 +26,24 @@ class Router
     }
 
     /**
-     * Ajouter une route au routeur
+     * Resolve controller name (short names to full namespaces)
+     * 
+     * @param string $controller Controller name (short or full)
+     * @return string Full controller namespace
+     */
+    private function resolveController(string $controller): string
+    {
+        // If it doesn't contain \, it's a short name -> add namespace
+        if (strpos($controller, '\\') === false) {
+            return 'EyoPHP\\Framework\\Controller\\' . $controller;
+        }
+
+        // Otherwise return as is (full namespace already provided)
+        return $controller;
+    }
+
+    /**
+     * Add a route to the router
      *
      * @param string $method HTTP method (GET, POST, PUT, DELETE)
      * @param string $path Route path with optional parameters (e.g., /user/{id})
@@ -36,10 +53,13 @@ class Router
      */
     public function addRoute(string $method, string $path, string $controller, string $action, array $middlewares = []): void
     {
+        // Automatically resolve controller name
+        $resolvedController = $this->resolveController($controller);
+
         $route = [
             'method' => $method,
             'path' => $path,
-            'controller' => $controller,
+            'controller' => $resolvedController,
             'action' => $action,
             'pattern' => $this->compilePattern($path),
             'middlewares' => $middlewares
@@ -47,34 +67,34 @@ class Router
 
         $this->routes[] = $route;
 
-        // Enregistrer automatiquement les middlewares de route
+        // Automatically register route middlewares
         foreach ($middlewares as $middleware) {
             MiddlewareManager::addToRoute($path, $middleware);
         }
     }
 
     /**
-     * Compiler un pattern de route en regex
+     * Compile a route pattern into regex
      *
-     * Convertit /user/{id} en ^/user/([^/]+)$
+     * Converts /user/{id} to ^/user/([^/]+)$
      *
      * @param string $path Route path
      * @return string Compiled regex pattern
      */
     private function compilePattern(string $path): string
     {
-        // Remplacer directement {param} par un groupe de capture
+        // Replace {param} directly with a capture group
         $pattern = preg_replace('/\{([^}]+)\}/', '([^/]+)', $path);
 
-        // Échapper les caractères spéciaux restants
+        // Escape remaining special characters
         $pattern = str_replace('/', '\/', $pattern);
 
-        // Ancrer le pattern
+        // Anchor the pattern
         return '/^' . $pattern . '$/';
     }
 
     /**
-     * Extraire les noms des paramètres d'une route
+     * Extract parameter names from a route
      *
      * @param string $path Route path
      * @return array Parameter names
@@ -86,7 +106,7 @@ class Router
     }
 
     /**
-     * Trouver le handler pour une requête
+     * Find the handler for a request
      *
      * @param string $method HTTP method
      * @param string $uri Request URI
@@ -95,20 +115,20 @@ class Router
     public function getHandler(string $method, string $uri)
     {
         foreach ($this->routes as $route) {
-            // Vérifier la méthode HTTP
+            // Check HTTP method
             if ($route['method'] !== $method) {
                 continue;
             }
 
-            // Tester le pattern
+            // Test the pattern
             if (preg_match($route['pattern'], $uri, $matches)) {
-                // Supprimer le premier élément (match complet)
+                // Remove first element (full match)
                 array_shift($matches);
 
-                // Extraire les noms des paramètres
+                // Extract parameter names
                 $paramNames = $this->extractParameterNames($route['path']);
 
-                // Créer un tableau associatif des paramètres
+                // Create associative array of parameters
                 $parameters = [];
                 foreach ($paramNames as $index => $name) {
                     $parameters[$name] = $matches[$index] ?? null;
@@ -128,7 +148,7 @@ class Router
     }
 
     /**
-     * Obtenir toutes les routes enregistrées
+     * Get all registered routes
      *
      * @return array All registered routes
      */
@@ -138,7 +158,7 @@ class Router
     }
 
     /**
-     * Générer une URL à partir d'un nom de route et de paramètres
+     * Generate a URL from a route name and parameters
      *
      * @param string $path Route path template
      * @param array $parameters Parameters to substitute
@@ -156,7 +176,7 @@ class Router
     }
 
     /**
-     * Ajouter une route publique (sans protection)
+     * Add a public route (without protection)
      *
      * @param string $method HTTP method
      * @param string $path Route path
@@ -169,7 +189,7 @@ class Router
     }
 
     /**
-     * Ajouter une route pour utilisateurs connectés
+     * Add a route for authenticated users
      *
      * @param string $method HTTP method
      * @param string $path Route path
@@ -182,7 +202,7 @@ class Router
     }
 
     /**
-     * Ajouter une route pour administrateurs uniquement
+     * Add a route for administrators only
      *
      * @param string $method HTTP method
      * @param string $path Route path

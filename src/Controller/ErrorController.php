@@ -3,7 +3,7 @@
 namespace EyoPHP\Framework\Controller;
 
 /**
- * ErrorController - Gestion des erreurs 404 et autres erreurs
+ * ErrorController - Error handling for 404 and other errors
  *
  * @package EyoPHP\Framework\Controller
  * @author  Alexandre PLOUZEAU
@@ -12,75 +12,62 @@ namespace EyoPHP\Framework\Controller;
 class ErrorController
 {
     /**
-     * Page d'accueil temporaire pour tester le framework
+     * Render a view
      */
-    public function home(): void
+    private function renderView(string $view, array $data = [])
     {
-        echo "<!DOCTYPE html>";
-        echo "<html><head><title>🚀 EyoPHP Framework</title></head>";
-        echo "<body>";
-        echo "<h1>🚀 Bienvenue sur EyoPHP Framework !</h1>";
-        echo "<p>✅ Le framework fonctionne correctement.</p>";
-        echo "<p>📖 Version: " . \EyoPHP\Framework\Framework::version() . "</p>";
-        echo "<p>🎯 Cette page est générée par ErrorController::home()</p>";
-        echo "<ul>";
-        echo "<li><a href='/login'>Page de connexion</a></li>";
-        echo "<li><a href='/register'>Page d'inscription</a></li>";
-        echo "<li><a href='/about'>À propos</a></li>";
-        echo "</ul>";
-        echo "</body></html>";
+        // Extract data to make it available in the view
+        extract($data);
+
+        // Define path to views
+        $viewPath = APP_PATH . "views/" . $view . ".php";
+
+        // Check if view exists
+        if (!file_exists($viewPath)) {
+            echo "<h1>Error 404</h1>";
+            echo "<p>View '$view' not found.</p>";
+            echo "<p>Path searched: $viewPath</p>";
+            return;
+        }
+
+        // Include the view
+        require_once $viewPath;
     }
 
     /**
-     * Affiche une page d'erreur
+     * 404 Not Found error page
      */
-    public function index($handler, $method, $uri): void
+    public function notFound(): void
     {
         http_response_code(404);
-
-        echo "<!DOCTYPE html>";
-        echo "<html><head><title>Erreur 404 - Page non trouvée</title></head>";
-        echo "<body>";
-        echo "<h1>Erreur 404 - Page non trouvée</h1>";
-        echo "<p>La page demandée n'existe pas.</p>";
-        echo "<p><strong>Méthode:</strong> " . htmlspecialchars($method) . "</p>";
-        echo "<p><strong>URI:</strong> " . htmlspecialchars($uri) . "</p>";
-
-        $isDebugMode = defined('APP_DEBUG') && constant('APP_DEBUG');
-        if ($isDebugMode) {
-            echo "<hr>";
-            echo "<h2>Informations de débogage</h2>";
-            echo "<pre>";
-            var_dump($handler);
-            echo "</pre>";
-        }
-
-        echo "</body></html>";
+        $this->renderView('error/404', [
+            'title' => '404 - Page Not Found',
+            'description' => 'The requested page could not be found on this server'
+        ]);
     }
 
     /**
-     * Affiche une erreur 500
+     * 403 Forbidden error page
      */
-    public function serverError(\Throwable $exception = null): void
+    public function forbidden(): void
+    {
+        http_response_code(403);
+        $this->renderView('error/403', [
+            'title' => '403 - Access Forbidden',
+            'description' => 'You do not have permission to access this resource'
+        ]);
+    }
+
+    /**
+     * 500 Internal Server Error page
+     */
+    public function serverError(?\Throwable $exception = null): void
     {
         http_response_code(500);
-
-        echo "<!DOCTYPE html>";
-        echo "<html><head><title>Erreur 500 - Erreur serveur</title></head>";
-        echo "<body>";
-        echo "<h1>Erreur 500 - Erreur serveur</h1>";
-        echo "<p>Une erreur interne s'est produite.</p>";
-
-        $isDebugMode = defined('APP_DEBUG') && constant('APP_DEBUG');
-        if ($isDebugMode && $exception) {
-            echo "<hr>";
-            echo "<h2>Informations de débogage</h2>";
-            echo "<pre>";
-            echo htmlspecialchars($exception->getMessage());
-            echo "\n\n" . htmlspecialchars($exception->getTraceAsString());
-            echo "</pre>";
-        }
-
-        echo "</body></html>";
+        $this->renderView('error/500', [
+            'title' => '500 - Internal Server Error',
+            'description' => 'The server encountered an internal error and could not complete your request',
+            'exception' => $exception
+        ]);
     }
 }

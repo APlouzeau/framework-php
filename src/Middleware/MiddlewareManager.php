@@ -3,9 +3,9 @@
 namespace EyoPHP\Framework\Middleware;
 
 /**
- * MiddlewareManager - Gestionnaire des middlewares
+ * MiddlewareManager - Middleware manager
  *
- * Gère l'exécution des middlewares avant et après les contrôleurs
+ * Manages middleware execution before and after controllers
  *
  * @package EyoPHP\Framework\Middleware
  * @author  Alexandre PLOUZEAU
@@ -14,21 +14,21 @@ namespace EyoPHP\Framework\Middleware;
 class MiddlewareManager
 {
     /**
-     * @var array Liste des middlewares globaux
+     * @var array List of global middlewares
      */
     private static array $globalMiddlewares = [];
 
     /**
-     * @var array Liste des middlewares par route
+     * @var array List of route-specific middlewares
      */
     private static array $routeMiddlewares = [];
 
     /**
-     * Ajouter un middleware global
+     * Add a global middleware
      *
-     * S'exécute sur toutes les routes
+     * Executes on all routes
      *
-     * @param string $middlewareClass Nom de la classe middleware
+     * @param string $middlewareClass Middleware class name
      */
     public static function addGlobal(string $middlewareClass): void
     {
@@ -38,10 +38,10 @@ class MiddlewareManager
     }
 
     /**
-     * Ajouter un middleware à une route spécifique
+     * Add a middleware to a specific route
      *
-     * @param string $route Pattern de route (ex: /user/{id})
-     * @param string $middlewareClass Nom de la classe middleware
+     * @param string $route Route pattern (e.g.: /user/{id})
+     * @param string $middlewareClass Middleware class name
      */
     public static function addToRoute(string $route, string $middlewareClass): void
     {
@@ -55,10 +55,10 @@ class MiddlewareManager
     }
 
     /**
-     * Exécuter les middlewares avant le contrôleur
+     * Execute middlewares before controller
      *
-     * @param array $request Données de la requête
-     * @return bool True pour continuer, False pour arrêter
+     * @param array $request Request data
+     * @return bool True to continue, False to stop
      */
     public static function runBefore(array $request): bool
     {
@@ -77,16 +77,16 @@ class MiddlewareManager
     }
 
     /**
-     * Exécuter les middlewares après le contrôleur
+     * Execute middlewares after controller
      *
-     * @param array $request Données de la requête
-     * @param mixed $response Réponse du contrôleur
+     * @param array $request Request data
+     * @param mixed $response Controller response
      */
     public static function runAfter(array $request, mixed $response = null): void
     {
         $middlewares = self::getMiddlewaresForRequest($request);
 
-        // Exécuter dans l'ordre inverse (LIFO)
+        // Execute in reverse order (LIFO)
         foreach (array_reverse($middlewares) as $middlewareClass) {
             $middleware = new $middlewareClass();
             $middleware->after($request, $response);
@@ -94,16 +94,16 @@ class MiddlewareManager
     }
 
     /**
-     * Obtenir tous les middlewares pour une requête
+     * Get all middlewares for a request
      *
-     * @param array $request Données de la requête
-     * @return array Liste des classes middleware
+     * @param array $request Request data
+     * @return array List of middleware classes
      */
     private static function getMiddlewaresForRequest(array $request): array
     {
         $middlewares = self::$globalMiddlewares;
 
-        // Ajouter les middlewares spécifiques à la route
+        // Add route-specific middlewares
         if (isset($request['path'])) {
             $routePath = $request['path'];
             if (isset(self::$routeMiddlewares[$routePath])) {
@@ -115,9 +115,9 @@ class MiddlewareManager
     }
 
     /**
-     * Obtenir la liste des middlewares enregistrés
+     * Get the list of registered middlewares
      *
-     * @return array Middlewares globaux et par route
+     * @return array Global and route-specific middlewares
      */
     public static function getRegisteredMiddlewares(): array
     {

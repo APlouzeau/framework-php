@@ -3,7 +3,7 @@
 namespace EyoPHP\Framework;
 
 /**
- * Framework - Point d'entrée principal du framework EyoPHP
+ * Framework - Main entry point for EyoPHP framework
  *
  * @package EyoPHP\Framework
  * @author  Alexandre PLOUZEAU
@@ -12,21 +12,21 @@ namespace EyoPHP\Framework;
 class Framework
 {
     /**
-     * Version du framework
+     * Framework version
      */
     public const VERSION = '0.1.0';
 
     /**
-     * Initialise le framework avec la configuration par défaut
+     * Initialize the framework with default configuration
      */
     public static function init(): void
     {
-        // Démarrage de session si pas déjà fait
+        // Start session if not already done
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Définir les constantes si pas déjà fait
+        // Define constants if not already done
         if (!defined('APP_PATH')) {
             define('APP_PATH', getcwd() . '/');
         }
@@ -37,7 +37,7 @@ class Framework
     }
 
     /**
-     * Retourne la version du framework
+     * Return the framework version
      */
     public static function version(): string
     {
