@@ -27,10 +27,6 @@
         "php": ">=8.1",
         "vlucas/phpdotenv": "^5.6"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^12.3",
-        "phpdocumentor/shim": "^3.8"
-    },
     "autoload": {
         "psr-4": {
             "EyoPHP\\Framework\\": "src/"
@@ -64,9 +60,6 @@
         "post-create-project-cmd": [
             "php scripts/setup.php"
         ],
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html tests/results/coverage --coverage-text",
-        "docs": "phpdoc -c phpdoc.xml",
         "docs-serve": "php -S localhost:8080 -t docs/api",
         "docs-clean": "rm -rf docs/api .phpdoc",
         "docs-setup": [
