@@ -25,15 +25,12 @@ class AuthController
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
-        // Validation basique
         if (empty($email) || empty($password)) {
             $_SESSION['error'] = 'Email et mot de passe requis.';
             header('Location: ' . BASE_URL . 'login');
             exit;
         }
 
-        // TODO: Authentification réelle avec base de données
-        // Pour le moment, on simule un utilisateur
         if ($email === 'admin@example.com' && $password === 'admin') {
             $_SESSION['user'] = [
                 'id' => 1,
@@ -65,9 +62,16 @@ class AuthController
         $password = $_POST['password'] ?? '';
         $confirmPassword = $_POST['confirmPassword'] ?? '';
 
+        if (!$this->verifyUserExists('email', $email)) {
+            Validator::ajaxResponse(0, "Un utilisateur avec cet email existe déjà.");
+        };
+        if (!$this->verifyUserExists('nickName', $nickName)) {
+            Validator::ajaxResponse(0, "Un utilisateur avec ce pseudo existe déjà.");
+        }
+
         $rules = [
             'nickName' => [
-                ['required'],           // Champ obligatoire
+                ['required'],          // Champ obligatoire
             ],
             'email' => [
                 ['required'],           // Champ obligatoire
@@ -94,14 +98,14 @@ class AuthController
         $validation = Validator::validateForm($formData, $rules);
 
         if (!$validation['valid']) {
-            // ✅ Correct: Utilise AppController::renderView (méthode statique)
-            AppController::renderView('register', [
-                'title' => 'Register',
-                'description' => 'Create your free account on EyoPHP Framework and start developing your web projects',
-                'errors' => $validation['errors'],
-                'data' => $formData
-            ]);
-            return;
+            $firstError = '';
+            foreach ($validation['errors'] as $fieldErrors) {
+                if (!empty($fieldErrors)) {
+                    $firstError = $fieldErrors[0];
+                    break;
+                }
+            }
+            Validator::ajaxResponse(0, $firstError ?: 'Erreur de validation');
         }
 
         // Création de l'utilisateur avec les bons noms de propriétés
@@ -140,5 +144,22 @@ class AuthController
         session_destroy();
         header('Location: ' . BASE_URL);
         exit;
+    }
+
+    public function verifyUserExists($field, $email)
+    {
+        $userModel = new UserModel();
+        return $userModel->isDataAvailable($field, $email);
+    }
+
+    public static function alreadyExistingData(array $data)
+    {
+        $userModel = new UserModel();
+        foreach ($data as $field => $value) {
+            if ($userModel->isDataAvailable($field, $value)) {
+                Validator::ajaxResponse(0, "$value existe déjà.");
+            }
+        }
+        return false;
     }
 }

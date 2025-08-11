@@ -39,5 +39,3 @@ spl_autoload_register(function ($class) {
 
 // Set default timezone
 date_default_timezone_set('Europe/Paris');
-
-echo "<!-- EyoPHP Framework Bootstrap loaded -->\n";

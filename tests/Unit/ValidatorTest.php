@@ -166,10 +166,22 @@ class ValidatorTest extends TestCase
         ];
 
         $rules = [
-            'nickName' => [['required']],
-            'email' => [['required'], ['email']],
-            'password' => [['required'], ['password'], ['length', 8, 20]],
-            'confirmPassword' => [['required'], ['match', 'password']],
+            'nickName' => [
+                ['required']
+            ],
+            'email' => [
+                ['required'],
+                ['email']
+            ],
+            'password' => [
+                ['required'],
+                ['password'],
+                ['length', 8, 20]
+            ],
+            'confirmPassword' => [
+                ['required'],
+                ['match', 'password']
+            ],
         ];
 
         $result = Validator::validateForm($data, $rules);

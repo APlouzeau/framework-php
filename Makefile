@@ -92,41 +92,6 @@ test-coverage: ## Run tests with coverage report
 	./vendor/bin/phpunit tests --bootstrap tests/bootstrap.php --no-configuration --coverage-html tests/results/coverage --coverage-text
 	@echo "📊 Coverage report: tests/results/coverage/index.html"
 
-# Documentation
-docs: ## Show documentation options
-	@echo "📚 EyoPHP Framework Documentation"
-	@echo "================================="
-	@echo ""
-	@echo "📖 Integrated VS Code documentation (RECOMMENDED):"
-	@echo "  • Hover over methods = PHPDoc documentation"
-	@echo "  • Auto-completion with contextual help"
-	@echo "  • Ctrl+Click = go to definition"
-	@echo ""
-	@echo "📄 Markdown documentation:"
-	@echo "  • README.md (general)"
-	@echo "  • INSTALL.md (installation guide)"
-	@echo "  • docs/API.md (API reference)"
-	@echo ""
-	@echo "🌐 HTML generation:"
-	@echo "  • make docs-generate (Docker instructions)"
-
-docs-generate: ## Generate API documentation with Docker
-	@echo "📦 HTML Documentation Generation"
-	@echo "==============================="
-	@echo ""
-	@echo "🐳 With Docker (RECOMMENDED):"
-	@echo "  docker run --rm -v \"%cd%:/data\" phpdoc/phpdoc:3 \\"
-	@echo "    run -d src,class,controller \\"
-	@echo "    -t docs/html \\"
-	@echo "    --title=\"EyoPHP Framework Documentation\""
-	@echo ""
-	@echo "📂 Result: docs/html/index.html"
-	@echo "⚠️  Note: Possible issues with spaces in Windows paths"
-
-docs-serve: ## Serve documentation on localhost:8080
-	@echo "📚 Serving documentation on http://localhost:8080"
-	composer docs-serve
-
 # Development
 serve: ## Start development server on localhost:8000
 	@echo "🚀 Starting development server..."

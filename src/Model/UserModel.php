@@ -27,7 +27,6 @@ class UserModel
      */
     public function register(User $user): bool
     {
-
         $query = "INSERT INTO users (nickName, email, password, id_role) VALUES (:nickName, :email, :password, :id_role)";
         $req = $this->getConnection()->prepare($query);
 
@@ -236,39 +235,18 @@ class UserModel
     }
 
     /**
-     * Check if nickname is available
+     * Check if data is available
      */
-    public function isNicknameAvailable(string $nickname, ?int $excludeUserId = null): bool
+    public function isDataAvailable(string $field, string $value): bool
     {
-        $query = "SELECT COUNT(*) FROM users WHERE nickname = :nickname";
-        $params = [':nickname' => $nickname];
-
-        if ($excludeUserId) {
-            $query .= " AND id_user != :exclude_id";
-            $params[':exclude_id'] = $excludeUserId;
+        $allowedFields = ['email', 'nickName'];
+        if (!in_array($field, $allowedFields, true)) {
+            throw new \InvalidArgumentException('Champ non autorisé');
         }
+        $req = $this->getConnection()->prepare("SELECT COUNT(*) FROM users WHERE $field = :value");
+        $req->bindValue(":value", $value);
 
-        $req = $this->getConnection()->prepare($query);
-        $req->execute($params);
-
-        return $req->fetchColumn() == 0;
-    }
-
-    /**
-     * Check if email is available
-     */
-    public function isEmailAvailable(string $email, ?int $excludeUserId = null): bool
-    {
-        $query = "SELECT COUNT(*) FROM users WHERE mail = :mail";
-        $params = [':mail' => $email];
-
-        if ($excludeUserId) {
-            $query .= " AND id_user != :exclude_id";
-            $params[':exclude_id'] = $excludeUserId;
-        }
-
-        $req = $this->getConnection()->prepare($query);
-        $req->execute($params);
+        $req->execute();
 
         return $req->fetchColumn() == 0;
     }

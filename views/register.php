@@ -12,5 +12,7 @@
         <input type="password" placeholder="Confirm Password" name="confirmPassword" required minlength="6" />
         <button type="submit">Sign Up</button>
     </form>
+    <div class="ajaxResponse"></div>
     <a href="<?= BASE_URL . "connexion" ?>"><button>Already have an account? Log in here!</button></a>
 </div>
+<script src="/views/js/auth.js"></script>

@@ -18,6 +18,7 @@ define('FRAMEWORK_ROOT', dirname(__DIR__));
 
 // Include Composer autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../config/config.php';
 
 // Set default timezone
 date_default_timezone_set('Europe/Paris');

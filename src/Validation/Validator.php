@@ -301,7 +301,7 @@ class Validator
             ];
         }
 
-        if (!preg_match('/^[0-9]{5}$/', $postalCode)) {
+        if (!preg_match('/^[\d]{5}$/', $postalCode)) {
             return [
                 'code' => 0,
                 'message' => 'Le code postal doit contenir exactement 5 chiffres.',
@@ -384,5 +384,17 @@ class Validator
             'valid' => $isValid,
             'errors' => $errors
         ];
+    }
+
+
+
+    public static function ajaxResponse(int $code, $message): void
+    {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'code' => $code,
+            'message' => $message
+        ]);
+        exit;
     }
 }
