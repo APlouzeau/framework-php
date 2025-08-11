@@ -27,13 +27,15 @@ Open [http://localhost:8000](http://localhost:8000) → You have a working app w
 ### 🧠 Smart Installation (Auto-detects from project name)
 
 **⚡ Minimal Mode** - Just add `-minimal` to your project name:
+
 ```bash
 composer create-project eyo/fw-php blog-minimal
-composer create-project eyo/fw-php api-minimal  
+composer create-project eyo/fw-php api-minimal
 composer create-project eyo/fw-php myapp-minimal
 ```
 
 **📚 Complete Mode** - Add `-complete` to your project name:
+
 ```bash
 composer create-project eyo/fw-php cms-complete
 composer create-project eyo/fw-php website-complete
@@ -41,12 +43,14 @@ composer create-project eyo/fw-php myapp-complete
 ```
 
 **🤔 Interactive Choice** - Use any other name:
+
 ```bash
 composer create-project eyo/fw-php myproject
 # Will ask you to choose between Complete/Minimal modes
 ```
 
 ### 🔧 Change Mode Later
+
 ```bash
 cd myproject
 php scripts/setup.php minimal    # Switch to minimal
@@ -54,6 +58,7 @@ php scripts/setup.php complete   # Switch to complete
 ```
 
 ### 🌍 Advanced: Environment Variables (Optional)
+
 ```bash
 EYOPHP_MODE=minimal composer create-project eyo/fw-php my-project
 EYOPHP_MODE=complete composer create-project eyo/fw-php my-project
@@ -62,6 +67,7 @@ EYOPHP_MODE=complete composer create-project eyo/fw-php my-project
 ### Alternative Installation Methods
 
 **Option 2: Add to Existing Project**
+
 ```bash
 composer require eyo/fw-php
 ```

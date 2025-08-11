@@ -12,7 +12,7 @@ class AppController
      */
     public function loginPage()
     {
-        $this->renderView('login', [
+        self::renderView('login', [
             'title' => 'Connexion',
             'description' => 'Connectez-vous à votre compte EyoPHP Framework pour accéder à votre espace personnel'
         ]);
@@ -23,7 +23,7 @@ class AppController
      */
     public function registerPage()
     {
-        $this->renderView('register', [
+        self::renderView('register', [
             'title' => 'Register',
             'description' => 'Create your free account on EyoPHP Framework and start developing your web projects'
         ]);
@@ -34,7 +34,7 @@ class AppController
      */
     public function homePage()
     {
-        $this->renderView('home', [
+        self::renderView('home', [
             'title' => 'Home',
             'description' => 'EyoPHP Framework Dashboard - Manage your projects and access all features',
             'user' => $_SESSION['user'] ?? null
@@ -46,7 +46,7 @@ class AppController
      */
     public function aboutPage()
     {
-        $this->renderView('about', [
+        self::renderView('about', [
             'title' => 'About',
             'description' => 'Discover EyoPHP Framework v0.1.0 - An educational, minimalist and modern PHP framework for learning web development',
             'framework' => 'EyoPHP Framework v0.1.0'
@@ -58,16 +58,16 @@ class AppController
      */
     public function contactPage()
     {
-        $this->renderView('contact', [
+        self::renderView('contact', [
             'title' => 'Contact',
             'description' => 'Contact the EyoPHP Framework team for your questions, suggestions or technical support'
         ]);
     }
 
     /**
-     * Render a view
+     * Render a view - Now public and static for use anywhere
      */
-    private function renderView(string $view, array $data = [])
+    public static function renderView(string $view, array $data = [])
     {
         // Extract data to make it available in the view
         extract($data);

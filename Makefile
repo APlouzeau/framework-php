@@ -14,7 +14,9 @@ help: ## Show all available commands
 	@echo "  make setup-db      - Initialize database"
 	@echo ""
 	@echo "🧪 Testing:"
-	@echo "  make test          - Run PHPUnit tests"
+	@echo "  make test          - Run all PHPUnit tests"
+	@echo "  make test-unit     - Run only unit tests"
+	@echo "  make test-integration - Run only integration tests"
 	@echo "  make test-coverage - Run tests with coverage report"
 	@echo ""
 	@echo "📚 Documentation:"
@@ -24,6 +26,8 @@ help: ## Show all available commands
 	@echo ""
 	@echo "🚀 Development:"
 	@echo "  make serve         - Start development server on localhost:8000"
+	@echo "  make pma           - Start phpMyAdmin on localhost:8081"
+	@echo "  make dev-full      - Instructions for both servers"
 	@echo "  make example       - Run example.php"
 	@echo ""
 	@echo "🧹 Maintenance:"
@@ -69,13 +73,23 @@ setup-db: ## Initialize database
 # Testing
 test: ## Run PHPUnit tests
 	@echo "🧪 Running tests..."
-	./vendor/bin/phpunit
+	./vendor/bin/phpunit tests --bootstrap tests/bootstrap.php --no-configuration --testdox
 	@echo "✅ Tests completed!"
+
+test-unit: ## Run only unit tests
+	@echo "🧪 Running unit tests..."
+	./vendor/bin/phpunit tests/Unit --bootstrap tests/bootstrap.php --no-configuration --testdox
+	@echo "✅ Unit tests completed!"
+
+test-integration: ## Run only integration tests
+	@echo "🧪 Running integration tests..."
+	./vendor/bin/phpunit tests/Integration --bootstrap tests/bootstrap.php --no-configuration --testdox
+	@echo "✅ Integration tests completed!"
 
 test-coverage: ## Run tests with coverage report
 	@echo "🧪 Running tests with coverage..."
 	@if not exist tests\results mkdir tests\results
-	./vendor/bin/phpunit --coverage-html tests/results/coverage --coverage-text
+	./vendor/bin/phpunit tests --bootstrap tests/bootstrap.php --no-configuration --coverage-html tests/results/coverage --coverage-text
 	@echo "📊 Coverage report: tests/results/coverage/index.html"
 
 # Documentation
@@ -148,3 +162,21 @@ dev: install test serve
 # Release preparation
 release: clean install test docs-generate
 	@echo "✅ Framework ready for release!"
+
+# phpMyAdmin
+pma: ## Start phpMyAdmin on localhost:8081
+	@echo "🚀 Starting phpMyAdmin..."
+	@echo "🌐 Access: http://localhost:8081"
+	@echo "⏹️  Stop: Ctrl+C"
+	@cd phpmyadmin && php -S localhost:8081
+
+# Combined development servers
+dev-full: ## Start both framework and phpMyAdmin
+	@echo "🚀 Starting development environment..."
+	@echo "📱 Framework: http://localhost:8000"
+	@echo "🗄️  phpMyAdmin: http://localhost:8081"
+	@echo ""
+	@echo "⚠️  You need to run these in separate terminals:"
+	@echo "  Terminal 1: make serve"
+	@echo "  Terminal 2: make pma"
+

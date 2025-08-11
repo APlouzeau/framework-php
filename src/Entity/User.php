@@ -12,8 +12,8 @@ namespace EyoPHP\Framework\Entity;
 class User
 {
     private int $id_user = 0;
-    private string $nickname = '';
-    private string $mail = '';
+    private string $nickName = '';
+    private string $email = '';
     private string $password = '';
     private string $created_at = '';
     private string $updated_at = '';
@@ -62,34 +62,34 @@ class User
     /**
      * Get the value of nickname
      */
-    public function getNickname(): string
+    public function getNickName(): string
     {
-        return $this->nickname;
+        return $this->nickName;
     }
 
     /**
      * Set the value of nickname
      */
-    public function setNickname($nickname): self
+    public function setNickName($nickName): self
     {
-        $this->nickname = (string) $nickname;
+        $this->nickName = (string) $nickName;
         return $this;
     }
 
     /**
      * Get the value of mail
      */
-    public function getMail(): string
+    public function getEmail(): string
     {
-        return $this->mail;
+        return $this->email;
     }
 
     /**
      * Set the value of mail
      */
-    public function setMail($mail): self
+    public function setEmail($email): self
     {
-        $this->mail = (string) $mail;
+        $this->email = (string) $email;
         return $this;
     }
 
@@ -205,7 +205,7 @@ class User
         $data = [
             'id_user' => $this->getId_user(),
             'nickname' => $this->getNickname(),
-            'mail' => $this->getMail(),
+            'mail' => $this->getEmail(),
             'created_at' => $this->getCreated_at(),
             'updated_at' => $this->getUpdated_at(),
             'id_role' => $this->getId_role()

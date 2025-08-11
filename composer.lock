@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e576e95f27f301fa526ed71b761b7617",
+    "content-hash": "d171cda55a6076589f68e1825874da95",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -588,220 +588,6 @@
             "time": "2025-07-27T20:03:57+00:00"
         },
         {
-            "name": "phar-io/composer-distributor",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phar-io/composer-distributor.git",
-                "reference": "dd7d936290b2a42b0c64bfe08090b5c597c280c9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/composer-distributor/zipball/dd7d936290b2a42b0c64bfe08090b5c597c280c9",
-                "reference": "dd7d936290b2a42b0c64bfe08090b5c597c280c9",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.1 || ^2.0",
-                "ext-dom": "*",
-                "ext-libxml": "*",
-                "phar-io/filesystem": "^2.0",
-                "phar-io/gnupg": "^1.0",
-                "php": "^7.3 || ^8.0"
-            },
-            "require-dev": {
-                "composer/composer": "^2.0",
-                "phpunit/phpunit": "^9.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PharIo\\ComposerDistributor\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Andreas Heigl",
-                    "email": "andreas@heigl.org",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Arne Blankerts",
-                    "email": "arne@blankerts.de",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Sebastian Feldmann",
-                    "email": "sf@sebastian-feldmann.info",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Base Code for a composer plugin that installs PHAR-files",
-            "homepage": "https://phar.io",
-            "keywords": [
-                "bin",
-                "binary",
-                "composer",
-                "distribute",
-                "phar",
-                "phive"
-            ],
-            "support": {
-                "issues": "https://github.com/phar-io/composer-distributor/issues",
-                "source": "https://github.com/phar-io/composer-distributor/tree/1.0.2"
-            },
-            "funding": [
-                {
-                    "url": "https://phar.io",
-                    "type": "other"
-                }
-            ],
-            "time": "2023-05-31T17:05:49+00:00"
-        },
-        {
-            "name": "phar-io/executor",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phar-io/executor.git",
-                "reference": "5bfb7400224a0c1cf83343660af85c7f5a073473"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/executor/zipball/5bfb7400224a0c1cf83343660af85c7f5a073473",
-                "reference": "5bfb7400224a0c1cf83343660af85c7f5a073473",
-                "shasum": ""
-            },
-            "require": {
-                "phar-io/filesystem": "^2.0",
-                "php": "^7.2||^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Arne Blankerts",
-                    "email": "arne@blankerts.de",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Sebastian Heuer",
-                    "email": "sebastian@phpeople.de",
-                    "role": "Developer"
-                }
-            ],
-            "support": {
-                "issues": "https://github.com/phar-io/executor/issues",
-                "source": "https://github.com/phar-io/executor/tree/1.0.1"
-            },
-            "time": "2020-11-30T10:53:57+00:00"
-        },
-        {
-            "name": "phar-io/filesystem",
-            "version": "2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phar-io/filesystem.git",
-                "reference": "222e3ea432262a05706b7066697c21257664d9d1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/filesystem/zipball/222e3ea432262a05706b7066697c21257664d9d1",
-                "reference": "222e3ea432262a05706b7066697c21257664d9d1",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2 || ^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Arne Blankerts",
-                    "email": "arne@blankerts.de",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Sebastian Heuer",
-                    "email": "sebastian@phpeople.de",
-                    "role": "Developer"
-                }
-            ],
-            "support": {
-                "issues": "https://github.com/phar-io/filesystem/issues",
-                "source": "https://github.com/phar-io/filesystem/tree/2.0.1"
-            },
-            "time": "2020-11-30T10:16:22+00:00"
-        },
-        {
-            "name": "phar-io/gnupg",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phar-io/gnupg.git",
-                "reference": "ed8ab1740ac4e9db99500e7252911f2821357093"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/gnupg/zipball/ed8ab1740ac4e9db99500e7252911f2821357093",
-                "reference": "ed8ab1740ac4e9db99500e7252911f2821357093",
-                "shasum": ""
-            },
-            "require": {
-                "phar-io/executor": "^1.0",
-                "phar-io/filesystem": "^2.0",
-                "php": "^7.2||^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Arne Blankerts",
-                    "email": "arne@blankerts.de",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Sebastian Heuer",
-                    "email": "sebastian@phpeople.de",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Thin GnuPG wrapper class around the gnupg binary, mimicking the pecl/gnupg api",
-            "support": {
-                "issues": "https://github.com/phar-io/gnupg/issues",
-                "source": "https://github.com/phar-io/gnupg/tree/1.0.3"
-            },
-            "time": "2024-08-22T20:45:57+00:00"
-        },
-        {
             "name": "phar-io/manifest",
             "version": "2.0.4",
             "source": {
@@ -918,42 +704,6 @@
                 "source": "https://github.com/phar-io/version/tree/3.2.1"
             },
             "time": "2022-02-21T01:04:05+00:00"
-        },
-        {
-            "name": "phpdocumentor/shim",
-            "version": "v3.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpDocumentor/shim.git",
-                "reference": "9a74290f4acca84361589ecd052878243f064333"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/shim/zipball/9a74290f4acca84361589ecd052878243f064333",
-                "reference": "9a74290f4acca84361589ecd052878243f064333",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^2.0",
-                "phar-io/composer-distributor": "^1.0"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "phpDocumentor\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "phpDocumentor\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "support": {
-                "source": "https://github.com/phpDocumentor/shim/tree/v3.8.1"
-            },
-            "time": "2025-07-21T19:34:24+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1291,16 +1041,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.3.0",
+            "version": "12.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "264da860d6fe0d00582355a6ecbbf7ae57b44895"
+                "reference": "0b18fea9cc38c59147b85c9eeaca9531969a8cee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/264da860d6fe0d00582355a6ecbbf7ae57b44895",
-                "reference": "264da860d6fe0d00582355a6ecbbf7ae57b44895",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0b18fea9cc38c59147b85c9eeaca9531969a8cee",
+                "reference": "0b18fea9cc38c59147b85c9eeaca9531969a8cee",
                 "shasum": ""
             },
             "require": {
@@ -1310,7 +1060,7 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "myclabs/deep-copy": "^1.13.3",
+                "myclabs/deep-copy": "^1.13.4",
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.3",
@@ -1320,13 +1070,13 @@
                 "phpunit/php-text-template": "^5.0.0",
                 "phpunit/php-timer": "^8.0.0",
                 "sebastian/cli-parser": "^4.0.0",
-                "sebastian/comparator": "^7.1.0",
+                "sebastian/comparator": "^7.1.2",
                 "sebastian/diff": "^7.0.0",
                 "sebastian/environment": "^8.0.2",
                 "sebastian/exporter": "^7.0.0",
                 "sebastian/global-state": "^8.0.0",
                 "sebastian/object-enumerator": "^7.0.0",
-                "sebastian/type": "^6.0.2",
+                "sebastian/type": "^6.0.3",
                 "sebastian/version": "^6.0.0",
                 "staabm/side-effects-detector": "^1.0.5"
             },
@@ -1368,7 +1118,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.3.0"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.3.3"
             },
             "funding": [
                 {
@@ -1392,7 +1142,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-01T05:14:47+00:00"
+            "time": "2025-08-11T05:34:32+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -1453,16 +1203,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "7.1.0",
+            "version": "7.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "03d905327dccc0851c9a08d6a979dfc683826b6f"
+                "reference": "1a7c2bce03a13a457ed3c975dfd331b3b4b133aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/03d905327dccc0851c9a08d6a979dfc683826b6f",
-                "reference": "03d905327dccc0851c9a08d6a979dfc683826b6f",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1a7c2bce03a13a457ed3c975dfd331b3b4b133aa",
+                "reference": "1a7c2bce03a13a457ed3c975dfd331b3b4b133aa",
                 "shasum": ""
             },
             "require": {
@@ -1521,7 +1271,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
                 "security": "https://github.com/sebastianbergmann/comparator/security/policy",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/7.1.0"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/7.1.2"
             },
             "funding": [
                 {
@@ -1541,7 +1291,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-17T07:41:58+00:00"
+            "time": "2025-08-10T08:50:08+00:00"
         },
         {
             "name": "sebastian/complexity",
@@ -2122,16 +1872,16 @@
         },
         {
             "name": "sebastian/type",
-            "version": "6.0.2",
+            "version": "6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "1d7cd6e514384c36d7a390347f57c385d4be6069"
+                "reference": "e549163b9760b8f71f191651d22acf32d56d6d4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/1d7cd6e514384c36d7a390347f57c385d4be6069",
-                "reference": "1d7cd6e514384c36d7a390347f57c385d4be6069",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/e549163b9760b8f71f191651d22acf32d56d6d4d",
+                "reference": "e549163b9760b8f71f191651d22acf32d56d6d4d",
                 "shasum": ""
             },
             "require": {
@@ -2167,15 +1917,27 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
                 "security": "https://github.com/sebastianbergmann/type/security/policy",
-                "source": "https://github.com/sebastianbergmann/type/tree/6.0.2"
+                "source": "https://github.com/sebastianbergmann/type/tree/6.0.3"
             },
             "funding": [
                 {
                     "url": "https://github.com/sebastianbergmann",
                     "type": "github"
+                },
+                {
+                    "url": "https://liberapay.com/sebastianbergmann",
+                    "type": "liberapay"
+                },
+                {
+                    "url": "https://thanks.dev/u/gh/sebastianbergmann",
+                    "type": "thanks_dev"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/sebastian/type",
+                    "type": "tidelift"
                 }
             ],
-            "time": "2025-03-18T13:37:31+00:00"
+            "time": "2025-08-09T06:57:12+00:00"
         },
         {
             "name": "sebastian/version",

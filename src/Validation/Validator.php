@@ -15,6 +15,26 @@ namespace EyoPHP\Framework\Validation;
 class Validator
 {
     /**
+     * Traduit les noms de champs techniques vers des libellés plus lisibles
+     */
+    private static function getFieldLabel(string $fieldName): string
+    {
+        $labels = [
+            'password' => 'mot de passe',
+            'confirmPassword' => 'mot de passe',  // Pour éviter la double confirmation
+            'email' => 'email',
+            'nickName' => 'nom d\'utilisateur',
+            'firstName' => 'prénom',
+            'lastName' => 'nom',
+            'phone' => 'téléphone',
+            'address' => 'adresse',
+            'city' => 'ville',
+            'postalCode' => 'code postal',
+        ];
+
+        return $labels[$fieldName] ?? $fieldName;
+    }
+    /**
      * Validate an email address
      *
      * Checks that an email address is valid according to RFC standards
@@ -98,13 +118,6 @@ class Validator
             ];
         }
 
-        if (strlen($password) < 8) {
-            return [
-                'code' => 0,
-                'message' => 'Le mot de passe doit contenir au moins 8 caractères.',
-            ];
-        }
-
         if (!preg_match('/[A-Z]/', $password)) {
             return [
                 'code' => 0,
@@ -142,16 +155,18 @@ class Validator
      */
     public static function validateMatch(string $field1, string $field2, string $fieldName = 'mot de passe'): array
     {
+        $label = self::getFieldLabel($fieldName);
+
         if ($field1 !== $field2) {
             return [
                 'code' => 0,
-                'message' => "La confirmation du {$fieldName} ne correspond pas.",
+                'message' => "La confirmation du {$label} ne correspond pas.",
             ];
         }
 
         return [
             'code' => 1,
-            'message' => "Les {$fieldName}s correspondent.",
+            'message' => "Les {$label}s correspondent.",
         ];
     }
 
@@ -186,27 +201,28 @@ class Validator
      * @param string $fieldName Nom du champ pour le message
      * @return array Tableau avec 'code' (0|1) et 'message' (string)
      */
-    public static function validateLength(string $value, int $min, int $max, string $fieldName = 'champ'): array
+    public static function validateLength(string $value, int $min, int $max = 128, string $fieldName = 'champ'): array
     {
         $length = strlen($value);
+        $label = self::getFieldLabel($fieldName);
 
         if ($length < $min) {
             return [
                 'code' => 0,
-                'message' => "Le {$fieldName} doit contenir au moins {$min} caractères.",
+                'message' => "Le {$label} doit contenir au moins {$min} caractères.",
             ];
         }
 
         if ($length > $max) {
             return [
                 'code' => 0,
-                'message' => "Le {$fieldName} ne peut pas dépasser {$max} caractères.",
+                'message' => "Le {$label} ne peut pas dépasser {$max} caractères.",
             ];
         }
 
         return [
             'code' => 1,
-            'message' => "Le {$fieldName} respecte la longueur requise.",
+            'message' => "Le {$label} respecte la longueur requise.",
         ];
     }
 
@@ -302,7 +318,7 @@ class Validator
      * Valide un formulaire complet
      *
      * @param array $data Données à valider
-     * @param array $rules Règles de validation
+     * @param array $rules Règles de validation par champ
      * @return array Résultat de validation avec erreurs
      */
     public static function validateForm(array $data, array $rules): array
@@ -310,33 +326,55 @@ class Validator
         $errors = [];
         $isValid = true;
 
-        foreach ($rules as $field => $fieldRules) {
-            $value = $data[$field] ?? '';
+        foreach ($rules as $fieldName => $fieldRules) {
+            $value = $data[$fieldName] ?? '';
 
             foreach ($fieldRules as $rule) {
                 $result = null;
 
-                switch ($rule['type']) {
+                // Extraire le type de règle (premier élément du tableau ou string)
+                if (is_array($rule)) {
+                    $ruleType = $rule[0] ?? '';
+                    $ruleParams = array_slice($rule, 1);
+                } else {
+                    $ruleType = $rule;
+                    $ruleParams = [];
+                }
+
+                switch ($ruleType) {
                     case 'required':
-                        $result = self::validateNotEmpty($value, $field);
+                        $result = self::validateNotEmpty($value, $fieldName);
                         break;
+
                     case 'email':
                         $result = self::validateEmail($value);
                         break;
+
                     case 'length':
-                        $result = self::validateLength($value, $rule['min'], $rule['max'], $field);
+                        $min = $ruleParams[0] ?? 1;
+                        $max = $ruleParams[1] ?? 128;
+                        $result = self::validateLength($value, $min, $max, $fieldName);
                         break;
+
                     case 'password':
                         $result = self::validatePasswordFormat($value);
                         break;
+
                     case 'match':
-                        $otherValue = $data[$rule['field']] ?? '';
-                        $result = self::validateMatch($value, $otherValue, $field);
+                        $otherField = $ruleParams[0] ?? '';
+                        $otherValue = $data[$otherField] ?? '';
+                        $result = self::validateMatch($value, $otherValue, $fieldName);
                         break;
+
+                    default:
+                        $result = [
+                            'code' => 0,
+                            'message' => "Règle de validation inconnue: {$ruleType}",
+                        ];
                 }
 
                 if ($result && $result['code'] === 0) {
-                    $errors[$field][] = $result['message'];
+                    $errors[$fieldName][] = $result['message'];
                     $isValid = false;
                 }
             }

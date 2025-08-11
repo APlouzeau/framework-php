@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.3/phpunit.xsd" bootstrap="tests/bootstrap.php" cacheDirectory=".phpunit.cache" executionOrder="depends,defects" shortenArraysForExportThreshold="10" stopOnDefect="false" stopOnError="false" stopOnFailure="false" colors="true" testdox="false">
+
+    <!-- Suites de tests -->
+    <testsuites>
+        <testsuite name="Unit Tests">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration Tests">
+            <directory>tests/Integration</directory>
+        </testsuite>
+    </testsuites>
+
+    <!-- Couverture de code -->
+    <coverage>
+        <report>
+            <html outputDirectory="coverage-html" lowUpperBound="50" highLowerBound="80"/>
+            <text outputFile="php://stdout" showUncoveredFiles="false"/>
+        </report>
+    </coverage>
+
+    <!-- Code source à analyser pour la couverture -->
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <directory>vendor</directory>
+            <directory>tests</directory>
+        </exclude>
+    </source>
+
+    <!-- Journalisation -->
+    <logging>
+        <junit outputFile="coverage/junit.xml"/>
+    </logging>
+
+    <!-- Configuration PHP -->
+    <php>
+        <ini name="error_reporting" value="E_ALL"/>
+        <ini name="display_errors" value="1"/>
+        <ini name="memory_limit" value="256M"/>
+        <env name="APP_ENV" value="testing"/>
+    </php>
+</phpunit>

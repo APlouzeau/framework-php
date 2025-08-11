@@ -37,5 +37,7 @@ tmp/
 *.backup
 *.sql.backup
 
+phpmyadmin/
+
 
 

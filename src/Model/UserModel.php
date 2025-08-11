@@ -27,16 +27,17 @@ class UserModel
      */
     public function register(User $user): bool
     {
-        $query = "INSERT INTO users (nickname, mail, password, id_role) VALUES (:nickname, :mail, :password, :id_role)";
+
+        $query = "INSERT INTO users (nickName, email, password, id_role) VALUES (:nickName, :email, :password, :id_role)";
         $req = $this->getConnection()->prepare($query);
 
         $nickname = htmlspecialchars(strip_tags($user->getNickname()));
-        $mail = htmlspecialchars(strip_tags($user->getMail()));
+        $mail = htmlspecialchars(strip_tags($user->getEmail()));
         $password_hash = password_hash($user->getPassword(), PASSWORD_BCRYPT);
         $id_role = $user->getId_role() ?: 1; // Default to 'user' role
 
-        $req->bindValue(":nickname", $nickname);
-        $req->bindValue(":mail", $mail);
+        $req->bindValue(":nickName", $nickname);
+        $req->bindValue(":email", $mail);
         $req->bindValue(":password", $password_hash);
         $req->bindValue(":id_role", $id_role, PDO::PARAM_INT);
 
@@ -164,7 +165,7 @@ class UserModel
         $req = $this->getConnection()->prepare($query);
 
         $nickname = htmlspecialchars(strip_tags($user->getNickname()));
-        $mail = htmlspecialchars(strip_tags($user->getMail()));
+        $mail = htmlspecialchars(strip_tags($user->getEmail()));
         $id_role = $user->getId_role();
         $id_user = $user->getId_user();
 

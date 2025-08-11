@@ -9,6 +9,8 @@
  */
 
 // Configuration de l'environnement
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 define('DEBUG', true); // Mettre à false en production
 define('ENVIRONMENT', 'development'); // development, production, testing
 
@@ -16,7 +18,8 @@ define('ENVIRONMENT', 'development'); // development, production, testing
 define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
 define('DB_NAME', $_ENV['DB_NAME'] ?? '');
 define('DB_USER', $_ENV['DB_USER'] ?? 'root');
-define('DB_PSW', $_ENV['DB_PSW'] ?? '');
+define('DB_PASSWORD', $_ENV['DB_PASSWORD'] ?? '');
+define('DB_PORT', $_ENV['DB_PORT'] ?? '3306');
 
 // Configuration des erreurs
 if (DEBUG) {

@@ -2,6 +2,11 @@
 
 namespace EyoPHP\Framework\Controller;
 
+use EyoPHP\Framework\Validation\Validator;
+use EyoPHP\Framework\Controller\AppController;
+use EyoPHP\Framework\Model\UserModel;
+use EyoPHP\Framework\Entity\User;
+
 /**
  * Contrôleur pour l'authentification des utilisateurs
  */
@@ -55,29 +60,76 @@ class AuthController
             exit;
         }
 
-        $name = $_POST['name'] ?? '';
+        $nickName = $_POST['nickName'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
-        $confirmPassword = $_POST['confirm_password'] ?? '';
+        $confirmPassword = $_POST['confirmPassword'] ?? '';
 
-        // Validation basique
-        if (empty($name) || empty($email) || empty($password)) {
-            $_SESSION['error'] = 'Tous les champs sont requis.';
-            header('Location: ' . BASE_URL . 'register');
-            exit;
+        $rules = [
+            'nickName' => [
+                ['required'],           // Champ obligatoire
+            ],
+            'email' => [
+                ['required'],           // Champ obligatoire
+                ['email'],              // Doit être un email valide
+            ],
+            'password' => [
+                ['required'],           // Champ obligatoire
+                ['password'],           // Format de mot de passe
+                ['length', 8, 20]       // Entre 8 et 20 caractères
+            ],
+            'confirmPassword' => [
+                ['required'],           // Champ obligatoire
+                ['match', 'password'],  // Doit correspondre au mot de passe
+            ],
+        ];
+
+        $formData = [
+            'nickName' => $nickName,
+            'email' => $email,
+            'password' => $password,
+            'confirmPassword' => $confirmPassword  // ✅ Ajouté: confirmPassword manquait
+        ];
+
+        $validation = Validator::validateForm($formData, $rules);
+
+        if (!$validation['valid']) {
+            // ✅ Correct: Utilise AppController::renderView (méthode statique)
+            AppController::renderView('register', [
+                'title' => 'Register',
+                'description' => 'Create your free account on EyoPHP Framework and start developing your web projects',
+                'errors' => $validation['errors'],
+                'data' => $formData
+            ]);
+            return;
         }
 
-        if ($password !== $confirmPassword) {
-            $_SESSION['error'] = 'Les mots de passe ne correspondent pas.';
-            header('Location: ' . BASE_URL . 'register');
-            exit;
-        }
+        // Création de l'utilisateur avec les bons noms de propriétés
+        $user = new User([
+            'nickName' => $nickName,  // ✅ nickName (comme dans l'Entity)
+            'email' => $email,        // ✅ email (comme dans l'Entity)
+            'password' => password_hash($password, PASSWORD_BCRYPT),
+            'id_role' => 1           // Rôle utilisateur par défaut
+        ]);
 
-        // TODO: Enregistrement en base de données
-        // Pour le moment, on simule un enregistrement réussi
-        $_SESSION['success'] = 'Inscription réussie ! Vous pouvez maintenant vous connecter.';
-        header('Location: ' . BASE_URL . 'login');
-        exit;
+        // ✅ Correct: UserModel est une instance (pas statique)
+        $userModel = new UserModel();
+        $result = $userModel->register($user);
+
+        if ($result) {
+            // Inscription réussie - redirection vers login
+            header('Location: ' . BASE_URL . 'connexion');
+            exit;
+        } else {
+            // Erreur lors de l'inscription
+            AppController::renderView('register', [
+                'title' => 'Register',
+                'description' => 'Create your free account on EyoPHP Framework and start developing your web projects',
+                'errors' => ['general' => ['Une erreur est survenue lors de l\'inscription']],
+                'data' => $formData
+            ]);
+            return;
+        }
     }
 
     /**
